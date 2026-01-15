@@ -1,12 +1,11 @@
+EMPTY
+<!-- Remove all lines above this line before making changes to the file -->
 ### Subject Matter Experts
 | SNo. | Name | Email | Institute | ID |
 | :---: | :---: | :---: | :---: | :---: |
-| 1 | Dr. A. Charan Kumari | charankumari@dei.ac.in | Dayalbagh Educational Institute | 1 |
-| 2 | Dr. K. Srinivas | ksrinivas@dei.ac.in | Dayalbagh Educational Institute | 2 |
-
+| 1 | name | email | institute | id |
 
 ### Developers
 | SNo. | Name | Email | Institute | ID |
 | :---: | :---: | :---: | :---: | :---: |
-| 1 | Punyak | punyak.dei@gmail.com | Dayalbagh Educational Institute | 1 |
-| 2 | Sumir Singh | sumirsingh19@gmail.com | Dayalbagh Educational Institute | 2 |
+| 1 | name | email | institute | id |

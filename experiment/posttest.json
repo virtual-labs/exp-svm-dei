@@ -2,173 +2,37 @@
   "version": 2.0,
   "questions": [
     {
-      "question": "Which kernel is best suited for the two-moons dataset?",
+      "question": "This is a Sample Question 1?",
       "answers": {
-        "a": "Linear",
-        "b": "Polynomial",
-        "c": "RBF",
-        "d": "Sigmoid"
+        "a": "answer1",
+        "b": "answer2",
+        "c": "answer3",
+        "d": "answer4"
       },
       "explanations": {
-        "a": "Incorrect because the two-moons dataset is non-linearly separable.",
-        "b": "Incorrect because it may not flexibly capture the curved structure of the data.",
-        "c": "Correct because the RBF kernel can model complex, non-linear decision boundaries.",
-        "d": "Incorrect because it is less stable and rarely preferred for such datasets."
+        "a": "Explanation 1  <a href='www.google.com'>here</a>",
+        "b": "Explanation 2",
+        "c": "Explanation 2",
+        "d": "Explanation 2"
       },
-      "correctAnswer": "c",
-      "difficulty": "intermediate"
-    },
-    {
-      "question": "What does parameter C control in SVM?",
-      "answers": {
-        "a": "Kernel type",
-        "b": "Regularization strength",
-        "c": "Learning rate",
-        "d": "Feature scaling"
-      },
-      "explanations": {
-        "a": "Incorrect because the kernel type is chosen separately.",
-        "b": "Correct because C controls the trade-off between margin maximization and classification error.",
-        "c": "Incorrect because SVM does not use a learning rate parameter.",
-        "d": "Incorrect because feature scaling is a preprocessing step."
-      },
-      "correctAnswer": "b",
-      "difficulty": "intermediate"
-    },
-    {
-      "question": "High gamma in RBF results in:",
-      "answers": {
-        "a": "Underfitting",
-        "b": "Overfitting",
-        "c": "Linear separation",
-        "d": "Noise reduction"
-      },
-      "explanations": {
-        "a": "Incorrect because high gamma makes the model more complex.",
-        "b": "Correct because high gamma causes the model to fit very closely to training data.",
-        "c": "Incorrect because RBF is non-linear by nature.",
-        "d": "Incorrect because high gamma can amplify noise."
-      },
-      "correctAnswer": "b",
-      "difficulty": "intermediate"
-    },
-    {
-      "question": "What does the diagonal of a confusion matrix represent?",
-      "answers": {
-        "a": "Errors",
-        "b": "Correct classifications",
-        "c": "Precision",
-        "d": "Recall"
-      },
-      "explanations": {
-        "a": "Incorrect because errors lie off the diagonal.",
-        "b": "Correct because diagonal elements show correctly predicted instances.",
-        "c": "Incorrect because precision is a derived metric.",
-        "d": "Incorrect because recall is also a derived metric."
-      },
-      "correctAnswer": "b",
+      "correctAnswer": "a",
       "difficulty": "beginner"
     },
     {
-      "question": "What does StandardScaler() do?",
+      "question": "This is a Sample Question 2?",
       "answers": {
-        "a": "Normalizes to [0,1]",
-        "b": "Removes outliers",
-        "c": "Standardizes to zero mean and unit variance",
-        "d": "Converts categorical data"
+        "a": "answer1",
+        "b": "answer2",
+        "c": "answer3",
+        "d": "answer4"
       },
       "explanations": {
-        "a": "Incorrect because this is done by MinMaxScaler.",
-        "b": "Incorrect because scaling does not remove data points.",
-        "c": "Correct because StandardScaler() transforms features accordingly.",
-        "d": "Incorrect because encoding is required for categorical variables."
+        "a": "Explanation 1  <a href='www.google.com'>here</a>",
+        "b": "Explanation 2",
+        "c": "Explanation 2",
+        "d": "Explanation 2"
       },
       "correctAnswer": "c",
-      "difficulty": "beginner"
-    },
-    {
-      "question": "SVM guarantees:",
-      "answers": {
-        "a": "Local optimum",
-        "b": "Global optimum",
-        "c": "Random solution",
-        "d": "Heuristic result"
-      },
-      "explanations": {
-        "a": "Incorrect because SVM optimization is convex.",
-        "b": "Correct because the convex optimization problem ensures a global optimum.",
-        "c": "Incorrect because SVM is deterministic.",
-        "d": "Incorrect because SVM is based on solid mathematical optimization."
-      },
-      "correctAnswer": "b",
-      "difficulty": "advanced"
-    },
-    {
-      "question": "Which parameter controls margin softness?",
-      "answers": {
-        "a": "Gamma",
-        "b": "Degree",
-        "c": "C",
-        "d": "Kernel"
-      },
-      "explanations": {
-        "a": "Incorrect because gamma controls the influence of individual points.",
-        "b": "Incorrect because degree applies only to polynomial kernels.",
-        "c": "Correct because C controls how much misclassification is allowed.",
-        "d": "Incorrect because kernel defines the transformation function."
-      },
-      "correctAnswer": "c",
-      "difficulty": "intermediate"
-    },
-    {
-      "question": "The RBF kernel maps data into:",
-      "answers": {
-        "a": "Lower dimension",
-        "b": "Same dimension",
-        "c": "Higher-dimensional feature space",
-        "d": "Binary space"
-      },
-      "explanations": {
-        "a": "Incorrect because RBF expands feature representation.",
-        "b": "Incorrect because non-linear separation requires higher dimensions.",
-        "c": "Correct because RBF implicitly maps data into an infinite-dimensional space.",
-        "d": "Incorrect because the mapping is continuous."
-      },
-      "correctAnswer": "c",
-      "difficulty": "intermediate"
-    },
-    {
-      "question": "SVM performs best when:",
-      "answers": {
-        "a": "Data is noisy",
-        "b": "Classes are overlapping",
-        "c": "Margin is maximized",
-        "d": "Features are unscaled"
-      },
-      "explanations": {
-        "a": "Incorrect because excessive noise reduces margin clarity.",
-        "b": "Incorrect because heavy overlap reduces separability.",
-        "c": "Correct because maximizing margin improves robustness and generalization.",
-        "d": "Incorrect because SVM is sensitive to feature scales."
-      },
-      "correctAnswer": "c",
-      "difficulty": "intermediate"
-    },
-    {
-      "question": "Generalization refers to:",
-      "answers": {
-        "a": "Optimal performance on training data",
-        "b": "Optimal performance on unseen data",
-        "c": "Fast training speed",
-        "d": "Less model size"
-      },
-      "explanations": {
-        "a": "Incorrect because this may indicate overfitting.",
-        "b": "Correct because generalization measures how well the model performs on new data.",
-        "c": "Incorrect because speed is unrelated to generalization.",
-        "d": "Incorrect because model size does not directly define generalization."
-      },
-      "correctAnswer": "b",
       "difficulty": "beginner"
     }
   ]

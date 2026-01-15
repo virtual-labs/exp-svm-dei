@@ -2,174 +2,38 @@
   "version": 2.0,
   "questions": [
     {
-      "question": "What type of learning algorithm is SVM?",
+      "question": "This is a Sample Question 1?",
       "answers": {
-        "a": "Unsupervised",
-        "b": "Supervised",
-        "c": "Reinforcement",
-        "d": "Semi-supervised"
+        "a": "answer1",
+        "b": "answer2",
+        "c": "answer3",
+        "d": "answer4"
       },
       "explanations": {
-        "a": "Incorrect because SVM requires labelled data to learn a decision boundary.",
-        "b": "Correct because SVM is trained using labelled input–output pairs.",
-        "c": "Incorrect because reinforcement learning is based on reward signals, not labelled datasets.",
-        "d": "Incorrect because standard SVM does not inherently combine labelled and unlabelled data."
+        "a": "Explanation 1  <a href='www.google.com'>here</a>",
+        "b": "Explanation 2",
+        "c": "Explanation 2",
+        "d": "Explanation 2"
       },
-      "correctAnswer": "b",
+      "correctAnswer": "a",
       "difficulty": "beginner"
     },
     {
-      "question": "Which concept ensures better generalization in SVM?",
+      "question": "This is a Sample Question 2?",
       "answers": {
-        "a": "Empirical Risk Minimization",
-        "b": "Gradient Descent",
-        "c": "Structural Risk Minimization",
-        "d": "Regularization"
+        "a": "answer1",
+        "b": "answer2",
+        "c": "answer3",
+        "d": "answer4"
       },
       "explanations": {
-        "a": "Incorrect because ERM focuses only on minimizing training error, which can lead to overfitting.",
-        "b": "Incorrect because it is an optimization technique, not a generalization principle.",
-        "c": "Correct because SVM balances model complexity and training error to improve generalization.",
-        "d": "Incorrect in this context because SRM is the core principle, while regularization is a supporting mechanism."
-      },
-      "correctAnswer": "c",
-      "difficulty": "intermediate"
-    },
-    {
-      "question": "What are the data points closest to the separating hyperplane called?",
-      "answers": {
-        "a": "Core points",
-        "b": "Support Vectors",
-        "c": "Cluster centres",
-        "d": "Outliers"
-      },
-      "explanations": {
-        "a": "Incorrect because this term is used in density-based clustering, not SVM.",
-        "b": "Correct because these points define the margin and influence the position of the hyperplane.",
-        "c": "Incorrect because cluster centres are used in clustering algorithms like K-means.",
-        "d": "Incorrect because outliers may be far from the hyperplane."
-      },
-      "correctAnswer": "b",
-      "difficulty": "beginner"
-    },
-    {
-      "question": "In a 2D space, the SVM hyperplane is a:",
-      "answers": {
-        "a": "Plane",
-        "b": "Line",
-        "c": "Curve",
-        "d": "Point"
-      },
-      "explanations": {
-        "a": "Incorrect because a plane exists in 3D space.",
-        "b": "Correct because a hyperplane in 2D reduces to a straight line.",
-        "c": "Incorrect because the decision boundary is linear in the transformed feature space.",
-        "d": "Incorrect because a point cannot separate data."
-      },
-      "correctAnswer": "b",
-      "difficulty": "beginner"
-    },
-    {
-      "question": "Which kernel is best suited for non-linear data?",
-      "answers": {
-        "a": "Linear",
-        "b": "Polynomial",
-        "c": "RBF",
-        "d": "Sigmoid"
-      },
-      "explanations": {
-        "a": "Incorrect because it can only model linear relationships.",
-        "b": "Incorrect because it may fail for highly complex non-linear patterns.",
-        "c": "Correct because the Radial Basis Function kernel can model complex, non-linear decision boundaries.",
-        "d": "Incorrect because it is less stable and less commonly used in practice."
-      },
-      "correctAnswer": "c",
-      "difficulty": "intermediate"
-    },
-    {
-      "question": "The objective of SVM is to:",
-      "answers": {
-        "a": "Minimize error",
-        "b": "Maximize margin",
-        "c": "Increase variance",
-        "d": "Reduce dimensions"
-      },
-      "explanations": {
-        "a": "Incorrect because SVM does not focus solely on training error.",
-        "b": "Correct because SVM aims to find the hyperplane with the maximum margin between classes.",
-        "c": "Incorrect because increasing variance reduces generalization.",
-        "d": "Incorrect because SVM is not primarily a dimensionality reduction algorithm."
-      },
-      "correctAnswer": "b",
-      "difficulty": "beginner"
-    },
-    {
-      "question": "What does the kernel trick allow?",
-      "answers": {
-        "a": "Feature elimination",
-        "b": "Linear approximation",
-        "c": "Implicit high-dimensional mapping",
-        "d": "Data normalization"
-      },
-      "explanations": {
-        "a": "Incorrect because kernels do not remove features.",
-        "b": "Incorrect because the kernel trick enables non-linear separation.",
-        "c": "Correct because kernels map data into higher-dimensional spaces without explicit computation.",
-        "d": "Incorrect because normalization is a preprocessing step."
-      },
-      "correctAnswer": "c",
-      "difficulty": "intermediate"
-    },
-    {
-      "question": "Which library is commonly used for SVM implementation in Python?",
-      "answers": {
-        "a": "NumPy",
-        "b": "Pandas",
-        "c": "Scikit-learn",
-        "d": "TensorFlow"
-      },
-      "explanations": {
-        "a": "Incorrect because NumPy provides numerical operations, not ML models.",
-        "b": "Incorrect because Pandas is used for data manipulation.",
-        "c": "Correct because it provides optimized and widely used SVM implementations.",
-        "d": "Incorrect because it is primarily used for deep learning."
+        "a": "Explanation 1  <a href='www.google.com'>here</a>",
+        "b": "Explanation 2",
+        "c": "Explanation 2",
+        "d": "Explanation 2"
       },
       "correctAnswer": "c",
       "difficulty": "beginner"
-    },
-    {
-      "question": "The distance between the hyperplane and nearest data points is called:",
-      "answers": {
-        "a": "Bias",
-        "b": "Margin",
-        "c": "Loss",
-        "d": "Error"
-      },
-      "explanations": {
-        "a": "Incorrect because bias is a model parameter.",
-        "b": "Correct because margin defines the separation between classes.",
-        "c": "Incorrect because loss measures prediction error.",
-        "d": "Incorrect because error refers to misclassification."
-      },
-      "correctAnswer": "b",
-      "difficulty": "beginner"
-    },
-    {
-      "question": "SVMs are particularly effective for:",
-      "answers": {
-        "a": "Time-series data",
-        "b": "High-dimensional datasets",
-        "c": "Image compression",
-        "d": "Clustering"
-      },
-      "explanations": {
-        "a": "Incorrect because SVMs are not specialized for temporal dependencies.",
-        "b": "Correct because SVMs perform well even when the number of features is large.",
-        "c": "Incorrect because compression is not a classification task.",
-        "d": "Incorrect because SVM is not an unsupervised clustering algorithm."
-      },
-      "correctAnswer": "b",
-      "difficulty": "intermediate"
     }
   ]
 }
