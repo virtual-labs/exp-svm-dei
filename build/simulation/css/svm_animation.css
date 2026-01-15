@@ -1,0 +1,466 @@
+/* Scoped Styles for SVM Animation - Exact Port from Original */
+#svm-animation-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 50%, #90caf9 100%);
+    z-index: 100;
+    display: none;
+    overflow-y: auto;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #1a237e;
+}
+
+#svm-animation-container * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Loading Screen */
+#svm-animation-container .loading-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, #1976d2 0%, #42a5f5 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+    transition: opacity 0.5s ease-out;
+}
+
+#svm-animation-container .loading-content {
+    text-align: center;
+    color: white;
+}
+
+#svm-animation-container .loader {
+    border: 4px solid rgba(255, 255, 255, 0.3);
+    border-top: 4px solid white;
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+    animation: svm-spin 1s linear infinite;
+    margin: 0 auto 20px;
+}
+
+@keyframes svm-spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+#svm-animation-container .loading-content h2 {
+    font-size: 28px;
+    margin-bottom: 10px;
+    font-weight: 300;
+}
+
+#svm-animation-container .main-app {
+    opacity: 1;
+    transition: opacity 0.5s ease-in;
+}
+
+#svm-animation-container .main-app.hidden {
+    opacity: 0;
+    pointer-events: none;
+}
+
+/* Header */
+#svm-animation-container .header {
+    text-align: center;
+    padding: 25px 20px;
+    background: linear-gradient(135deg, #1e88e5 0%, #42a5f5 100%);
+    color: white;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+    position: relative;
+}
+
+#svm-animation-container .header h1 {
+    font-size: 36px;
+    font-weight: 300;
+    margin-bottom: 5px;
+}
+
+#svm-animation-container .subtitle {
+    font-size: 16px;
+    opacity: 0.9;
+}
+
+#svm-animation-container .back-to-exp-btn {
+    position: absolute;
+    left: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    padding: 10px 20px;
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: all 0.2s;
+}
+
+#svm-animation-container .back-to-exp-btn:hover {
+    background: rgba(255, 255, 255, 0.3);
+}
+
+/* Layout */
+#svm-animation-container .dataset-section {
+    padding: 25px;
+}
+
+#svm-animation-container .layout {
+    display: grid;
+    grid-template-columns: 1fr 320px;
+    gap: 25px;
+    max-width: 1600px;
+    margin: 0 auto;
+}
+
+/* Visualization Container */
+#svm-animation-container .viz-container {
+    background: white;
+    border-radius: 16px;
+    padding: 20px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+}
+
+#svm-animation-container .dual-plots {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+#svm-animation-container .plot-box {
+    background: #f8f9fa;
+    border-radius: 12px;
+    padding: 15px;
+}
+
+#svm-animation-container .plot-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+#svm-animation-container .plot-header h3 {
+    color: #1565c0;
+    font-size: 18px;
+}
+
+#svm-animation-container .hyperplane-btn {
+    padding: 6px 14px;
+    background: linear-gradient(135deg, #1976d2 0%, #42a5f5 100%);
+    color: white;
+    border: none;
+    border-radius: 15px;
+    cursor: pointer;
+    font-size: 12px;
+}
+
+#svm-animation-container canvas {
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+    background: white;
+}
+
+/* Legend */
+#svm-animation-container .legend {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin: 15px 0;
+    padding: 10px;
+    background: #f8f9fa;
+    border-radius: 8px;
+    flex-wrap: wrap;
+}
+
+#svm-animation-container .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    color: #546e7a;
+}
+
+#svm-animation-container .dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+}
+
+#svm-animation-container .dot.class0 { background: #1f77b4; }
+#svm-animation-container .dot.class1 { background: #ff7f0e; }
+#svm-animation-container .dot.correct { background: #4caf50; }
+#svm-animation-container .dot.wrong { background: #f44336; }
+
+#svm-animation-container .ring {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    border: 2px solid #9c27b0;
+    background: transparent;
+}
+
+/* Metrics */
+#svm-animation-container .dual-metrics {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+#svm-animation-container .metrics-display {
+    padding: 15px;
+    background: #f8f9fa;
+    border-radius: 10px;
+}
+
+#svm-animation-container .metrics-display h4 {
+    color: #1565c0;
+    font-size: 13px;
+    margin-bottom: 10px;
+}
+
+#svm-animation-container .metric-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 6px 0;
+    border-bottom: 1px solid #e3f2fd;
+    font-size: 12px;
+}
+
+#svm-animation-container .metric-item:last-child {
+    border-bottom: none;
+}
+
+#svm-animation-container .metric-label {
+    color: #546e7a;
+    font-family: 'Consolas', monospace;
+}
+
+#svm-animation-container .metric-value {
+    color: #1976d2;
+    font-weight: 600;
+    font-family: 'Consolas', monospace;
+}
+
+/* Sidebar */
+#svm-animation-container .sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+#svm-animation-container .panel {
+    background: white;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+}
+
+#svm-animation-container .panel h3 {
+    color: #1565c0;
+    font-size: 16px;
+    margin-bottom: 15px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #e3f2fd;
+}
+
+#svm-animation-container .control-group {
+    margin-bottom: 18px;
+}
+
+#svm-animation-container .control-group:last-child {
+    margin-bottom: 0;
+}
+
+#svm-animation-container .control-group label {
+    display: block;
+    color: #37474f;
+    font-size: 13px;
+    font-weight: 600;
+    margin-bottom: 8px;
+}
+
+#svm-animation-container .toggle-buttons {
+    display: flex;
+    gap: 8px;
+}
+
+#svm-animation-container .toggle-btn {
+    flex: 1;
+    padding: 10px;
+    border: 2px solid #bbdefb;
+    background: white;
+    color: #1976d2;
+    font-size: 13px;
+    font-weight: 600;
+    font-family: 'Consolas', monospace;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+#svm-animation-container .toggle-btn:hover {
+    background: #e3f2fd;
+}
+
+#svm-animation-container .toggle-btn.active {
+    background: linear-gradient(135deg, #1976d2 0%, #42a5f5 100%);
+    color: white;
+    border-color: #1976d2;
+}
+
+/* Overview Table */
+#svm-animation-container .overview-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 12px;
+}
+
+#svm-animation-container .overview-table th,
+#svm-animation-container .overview-table td {
+    padding: 8px 10px;
+    text-align: left;
+    border-bottom: 1px solid #e3f2fd;
+}
+
+#svm-animation-container .overview-table th {
+    color: #546e7a;
+    font-weight: 600;
+    width: 45%;
+}
+
+#svm-animation-container .overview-table td {
+    color: #1976d2;
+    font-weight: 600;
+    font-family: 'Consolas', monospace;
+}
+
+#svm-animation-container .overview-table tr:last-child td,
+#svm-animation-container .overview-table tr:last-child th {
+    border-bottom: none;
+}
+
+#svm-animation-container .panel p {
+    color: #546e7a;
+    line-height: 1.5;
+    font-size: 13px;
+    margin-bottom: 12px;
+}
+
+/* Modal */
+#svm-animation-container .modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    transition: opacity 0.3s ease;
+}
+
+#svm-animation-container .modal.hidden {
+    opacity: 0;
+    pointer-events: none;
+}
+
+#svm-animation-container .modal-content {
+    background: white;
+    border-radius: 16px;
+    padding: 25px;
+    max-width: 780px;
+    width: 95%;
+}
+
+#svm-animation-container .modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+    padding-bottom: 12px;
+    border-bottom: 2px solid #e3f2fd;
+}
+
+#svm-animation-container .modal-header h2 {
+    color: #1565c0;
+    font-size: 20px;
+}
+
+#svm-animation-container .close-btn {
+    width: 36px;
+    height: 36px;
+    border: none;
+    background: #f44336;
+    color: white;
+    font-size: 18px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#svm-animation-container #hyperplaneCanvas {
+    width: 100%;
+    height: auto;
+    border-radius: 10px;
+}
+
+#svm-animation-container .modal-controls {
+    text-align: center;
+    margin-top: 15px;
+}
+
+#svm-animation-container .modal-controls p {
+    color: #78909c;
+    font-size: 13px;
+    margin-bottom: 10px;
+}
+
+#svm-animation-container .reset-btn {
+    padding: 10px 24px;
+    background: linear-gradient(135deg, #1976d2 0%, #42a5f5 100%);
+    color: white;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 14px;
+    margin: 0 5px;
+}
+
+/* Responsive */
+@media (max-width: 1200px) {
+    #svm-animation-container .layout {
+        grid-template-columns: 1fr;
+    }
+
+    #svm-animation-container .sidebar {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+@media (max-width: 768px) {
+    #svm-animation-container .dual-plots,
+    #svm-animation-container .dual-metrics {
+        grid-template-columns: 1fr;
+    }
+
+    #svm-animation-container .sidebar {
+        grid-template-columns: 1fr;
+    }
+}
