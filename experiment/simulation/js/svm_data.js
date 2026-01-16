@@ -5,7 +5,7 @@
 const SVM_PLOT_DATA = {
   "metadata": {
     "dataset": "two_moons",
-    "description": "Two interleaving half circles (moons) used to demonstrate non-linear classification. This dataset is a classic example where linear classifiers fail and RBF kernels excel.",
+    "description": "Note: This interactive visualization demonstrates the Two Moons dataset only. Two interleaving half circles (moons) used to demonstrate non-linear classification. This dataset is a classic example where linear classifiers fail and RBF kernels excel.",
     "sample_sizes": [
       300,
       750,
