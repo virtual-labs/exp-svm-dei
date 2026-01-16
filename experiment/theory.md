@@ -7,7 +7,7 @@ The goal of the Support Vector Machine is to find the hyperplane that maximizes 
 A hyperplane is a flat affine subspace of one dimension less than its ambient space. In an n-dimensional space, a hyperplane has (n-1) dimensions. For a linearly separable dataset, the SVM seeks a separating hyperplane defined by:
 
 <div style="text-align: center; margin: 15px 0;">
-<span style="display: inline-block; padding: 10px 20px; border: 1px solid #ccc; background-color: #f9f9f9; font-style: italic;">w<sup>T</sup>·x + b = 0</span>
+<span style="display: inline-block; padding: 10px 20px; border: 1px solid #ccc; background-color: #f9f9f9; font-style: italic;">w<sup>T</sup> x + b = 0</span>
 </div>
 
 where **w** is the weight vector which is normal to the hyperplane and **b** is the bias term.
