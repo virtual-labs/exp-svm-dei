@@ -121,6 +121,48 @@
     background-color: #e9ecef;
 }
 
+/* Table Wrapper for Horizontal Scrolling */
+.table-wrapper {
+    width: 100%;
+    padding-right: 15px;
+    box-sizing: border-box;
+}
+
+.table-wrapper .table-scroll-container {
+    overflow-x: auto;
+    overflow-y: hidden;
+    max-width: 100%;
+    padding-bottom: 8px;
+}
+
+.table-wrapper .table-scroll-container::-webkit-scrollbar {
+    height: 8px;
+}
+
+.table-wrapper .table-scroll-container::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 4px;
+}
+
+.table-wrapper .table-scroll-container::-webkit-scrollbar-thumb {
+    background: #c1c1c1;
+    border-radius: 4px;
+}
+
+.table-wrapper .table-scroll-container::-webkit-scrollbar-thumb:hover {
+    background: #a1a1a1;
+}
+
+.table-wrapper .data-table {
+    margin-top: 0;
+}
+
+.table-wrapper .data-table th,
+.table-wrapper .data-table td {
+    white-space: nowrap;
+    padding: 8px 12px;
+}
+
 /* Global Styles */
 body {
     margin: 0;

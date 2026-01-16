@@ -59,19 +59,19 @@
 					</div>
 				</div>
 
-				<!-- KERNEL SELECTOR PANE (Hidden) -->
-				<div class="metric-selector-pane" id="kernelSelectorPane" style="display: none;">
+				<!-- DATASET SELECTOR PANE (Hidden) -->
+				<div class="metric-selector-pane" id="datasetSelectorPane" style="display: none;">
 					<div class="selector-card">
-						<h2>Select SVM Kernel</h2>
-						<p>Choose the kernel function to map the data into a higher dimensional space.</p>
+						<h2>Select Dataset</h2>
+						<p>Choose the dataset to train and evaluate the SVM model.</p>
 						<div class="metric-options">
-							<div class="metric-option" onclick="selectKernel('linear')">
-								<h3>Linear Kernel</h3>
-								<p>Creates a linear decision boundary. Best for linearly separable data.</p>
+							<div class="metric-option" onclick="selectDataset('wine')">
+								<h3>🍷 Wine Dataset</h3>
+								<p>Linearly separable data with 3 classes. Uses Linear Kernel SVM.</p>
 							</div>
-							<div class="metric-option" onclick="selectKernel('rbf')">
-								<h3>RBF Kernel</h3>
-								<p>Radial Basis Function kernel. Capable of handling non-linear boundaries.</p>
+							<div class="metric-option" onclick="selectDataset('moons')">
+								<h3>🌙 Two Moons Dataset</h3>
+								<p>Non-linearly separable data. Compares Linear vs RBF Kernel SVM.</p>
 							</div>
 						</div>
 					</div>
