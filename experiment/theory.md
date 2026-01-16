@@ -1,10 +1,8 @@
-### Theory
-
 Support Vector Machines (SVMs) were formally established as a statistical learning framework grounded in the principle of Structural Risk Minimization (SRM), by Cortes and Vapnik (1995). The fundamental objective of SVM resides in determining an optimal decision boundary that maximizes the separation margin between different classes in a given feature space.
 
 The goal of the Support Vector Machine is to find the hyperplane that maximizes the margin between two classes. This principle ensures improved generalization performance by minimizing the upper bound on the generalization error rather than merely minimizing empirical risk.
 
-#### Hyperplane
+#### 1. Hyperplane
 
 A hyperplane is a flat affine subspace of one dimension less than its ambient space. In an n-dimensional space, a hyperplane has (n-1) dimensions. For a linearly separable dataset, the SVM seeks a separating hyperplane defined by:
 
@@ -16,11 +14,11 @@ where **w** is the weight vector which is normal to the hyperplane and **b** is 
 
 > **Note:** An optimal hyperplane is the one that maximizes the margin between the classes.
 
-#### Support Vectors
+#### 2. Support Vectors
 
 A margin is defined as the perpendicular distance between the hyperplane and the nearest data points from each class. These points are known as **support vectors**.
 
-#### Margin Maximization
+#### 3. Margin Maximization
 
 The margin maximization problem can be formulated as:
 
@@ -36,7 +34,7 @@ with constraint:
 
 for all training samples (x<sub>i</sub>, y<sub>i</sub>). This formulation ensures that the separating hyperplane lies as far as possible from the closest data points, thereby enhancing the classifier's ability to generalize to unseen data.
 
-#### Kernels
+#### 4. Kernels
 
 SVM employs the **kernel trick** to handle decision boundaries. The input data is implicitly mapped to a higher-dimensional feature space where separation becomes feasible. This transformation is performed through kernel functions without explicitly computing the coordinates in the high-dimensional space.
 
@@ -65,13 +63,13 @@ In the figure given below, Linear Kernel (left) is unable to separate a single '
 <img src="images/svm2.png" alt="RBF Kernel" style="max-height: 300px; width: auto;">
 </div>
 
-#### Merits of Support Vector Machines
+#### 5. Merits of Support Vector Machines
 
 - **Good generalization performance:** SVMs focus on maximizing the margin between classes, which helps the model perform well on unseen data and reduces overfitting, especially in high-dimensional datasets.
 - **Works well for both linear and non-linear data:** By using different kernel functions such as Linear and RBF, SVMs can handle simple linearly separable data as well as complex non-linear patterns effectively.
 - **Uses only important data points:** The model depends mainly on support vectors, which are the most critical data points near the decision boundary. This makes the classifier efficient and robust.
 
-#### Demerits of Support Vector Machines
+#### 6. Demerits of Support Vector Machines
 
 - **High training time for large datasets:** SVM training can be slow and computationally expensive when the dataset is very large, particularly when non-linear kernels are used.
 - **Sensitive to parameter selection:** The performance of SVM strongly depends on choosing the right kernel and hyper-parameters. Incorrect values can lead to poor classification results.

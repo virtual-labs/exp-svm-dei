@@ -351,10 +351,9 @@
               <h2 id="support-vector-machine-svm">Support Vector Machine (SVM)</h2>
           
             </div>
-              <h3 id="theory">Theory</h3>
-          <p>Support Vector Machines (SVMs) were formally established as a statistical learning framework grounded in the principle of Structural Risk Minimization (SRM), by Cortes and Vapnik (1995). The fundamental objective of SVM resides in determining an optimal decision boundary that maximizes the separation margin between different classes in a given feature space.</p>
+              <p>Support Vector Machines (SVMs) were formally established as a statistical learning framework grounded in the principle of Structural Risk Minimization (SRM), by Cortes and Vapnik (1995). The fundamental objective of SVM resides in determining an optimal decision boundary that maximizes the separation margin between different classes in a given feature space.</p>
           <p>The goal of the Support Vector Machine is to find the hyperplane that maximizes the margin between two classes. This principle ensures improved generalization performance by minimizing the upper bound on the generalization error rather than merely minimizing empirical risk.</p>
-          <h4 id="hyperplane">Hyperplane</h4>
+          <h4 id="1-hyperplane">1. Hyperplane</h4>
           <p>A hyperplane is a flat affine subspace of one dimension less than its ambient space. In an n-dimensional space, a hyperplane has (n-1) dimensions. For a linearly separable dataset, the SVM seeks a separating hyperplane defined by:</p>
           <div style="text-align: center; margin: 15px 0;">
           <span style="display: inline-block; padding: 10px 20px; border: 1px solid #ccc; background-color: #f9f9f9; font-style: italic;">w<sup>T</sup>·x + b = 0</span>
@@ -364,9 +363,9 @@
           <blockquote>
           <p><strong>Note:</strong> An optimal hyperplane is the one that maximizes the margin between the classes.</p>
           </blockquote>
-          <h4 id="support-vectors">Support Vectors</h4>
+          <h4 id="2-support-vectors">2. Support Vectors</h4>
           <p>A margin is defined as the perpendicular distance between the hyperplane and the nearest data points from each class. These points are known as <strong>support vectors</strong>.</p>
-          <h4 id="margin-maximization">Margin Maximization</h4>
+          <h4 id="3-margin-maximization">3. Margin Maximization</h4>
           <p>The margin maximization problem can be formulated as:</p>
           <div style="text-align: center; margin: 15px 0;">
           <span style="display: inline-block; padding: 10px 20px; border: 1px solid #ccc; background-color: #f9f9f9; font-style: italic;">min<sub>w,b</sub> ½||w||²</span>
@@ -378,7 +377,7 @@
           </div>
           
           <p>for all training samples (x<sub>i</sub>, y<sub>i</sub>). This formulation ensures that the separating hyperplane lies as far as possible from the closest data points, thereby enhancing the classifier's ability to generalize to unseen data.</p>
-          <h4 id="kernels">Kernels</h4>
+          <h4 id="4-kernels">4. Kernels</h4>
           <p>SVM employs the <strong>kernel trick</strong> to handle decision boundaries. The input data is implicitly mapped to a higher-dimensional feature space where separation becomes feasible. This transformation is performed through kernel functions without explicitly computing the coordinates in the high-dimensional space.</p>
           <p><strong>Common Kernel functions include:</strong></p>
           <p><strong>Linear Kernel:</strong> The linear kernel is suitable when the data is approximately linearly separable.</p>
@@ -399,13 +398,13 @@
           <img src="images/svm2.png" alt="RBF Kernel" style="max-height: 300px; width: auto;">
           </div>
           
-          <h4 id="merits-of-support-vector-machines">Merits of Support Vector Machines</h4>
+          <h4 id="5-merits-of-support-vector-machines">5. Merits of Support Vector Machines</h4>
           <ul>
           <li><strong>Good generalization performance:</strong> SVMs focus on maximizing the margin between classes, which helps the model perform well on unseen data and reduces overfitting, especially in high-dimensional datasets.</li>
           <li><strong>Works well for both linear and non-linear data:</strong> By using different kernel functions such as Linear and RBF, SVMs can handle simple linearly separable data as well as complex non-linear patterns effectively.</li>
           <li><strong>Uses only important data points:</strong> The model depends mainly on support vectors, which are the most critical data points near the decision boundary. This makes the classifier efficient and robust.</li>
           </ul>
-          <h4 id="demerits-of-support-vector-machines">Demerits of Support Vector Machines</h4>
+          <h4 id="6-demerits-of-support-vector-machines">6. Demerits of Support Vector Machines</h4>
           <ul>
           <li><strong>High training time for large datasets:</strong> SVM training can be slow and computationally expensive when the dataset is very large, particularly when non-linear kernels are used.</li>
           <li><strong>Sensitive to parameter selection:</strong> The performance of SVM strongly depends on choosing the right kernel and hyper-parameters. Incorrect values can lead to poor classification results.</li>

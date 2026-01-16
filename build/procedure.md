@@ -1,5 +1,3 @@
-### Procedure
-
 #### Part 1: Linear SVM on Wine Recognition Dataset
 
 The objective of this part of the experiment is to implement a Support Vector Machine (SVM) classifier on a real-world dataset to study linear class separability. The Wine Recognition dataset is used, where selected chemical attributes are employed to classify three types of wines: Barolo, Grignolino, and Barbera. This part focuses on understanding linear decision boundaries, margin maximization, and the effect of feature selection on classification accuracy.

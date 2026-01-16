@@ -4,4 +4,4 @@
 
 2. V. N. Vapnik, *Statistical Learning Theory*. New York, NY, USA: Wiley, 1998.
 
-3. Scikit-learn Developers, [Support Vector Machines](https://scikit-learn.org/stable/modules/svm.html), scikit-learn Documentation.
+3. Scikit-learn Developers, Support Vector Machines, scikit-learn Documentation.
