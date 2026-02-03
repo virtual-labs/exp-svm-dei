@@ -100,26 +100,42 @@
 							<div class="plot-box">
 								<div class="plot-header">
 									<h3><strong>Linear Kernel</strong></h3>
-									<button class="hyperplane-btn" data-kernel="linear-moons">View 3D</button>
+									<div class="plot-actions">
+										<button class="formation-btn" data-kernel="linear">Animate Formation</button>
+										<button class="hyperplane-btn" data-kernel="linear-moons">View 3D</button>
+									</div>
 								</div>
 								<canvas id="moonsLinearCanvas" width="600" height="600"></canvas>
 							</div>
 							<div class="plot-box">
 								<div class="plot-header">
 									<h3><strong>RBF Kernel</strong></h3>
-									<button class="hyperplane-btn" data-kernel="rbf-moons">View 3D</button>
+									<div class="plot-actions">
+										<button class="formation-btn" data-kernel="rbf">Animate Formation</button>
+										<button class="hyperplane-btn" data-kernel="rbf-moons">View 3D</button>
+									</div>
 								</div>
 								<canvas id="moonsRbfCanvas" width="600" height="600"></canvas>
 							</div>
 						</div>
 
-						<!-- Legend -->
+						<!-- Interactive Legend - Toggle Point Visibility -->
 						<div class="legend">
-							<span class="legend-item"><span class="dot class0"></span> Class 0</span>
-							<span class="legend-item"><span class="dot class1"></span> Class 1</span>
-							<span class="legend-item"><span class="dot correct"></span> Correct</span>
-							<span class="legend-item"><span class="dot wrong"></span> Wrong</span>
-							<span class="legend-item"><span class="ring"></span> Support Vector</span>
+							<button class="legend-btn active" data-type="train-class0">
+								<span class="dot class0"></span> Class 0 (Train)
+							</button>
+							<button class="legend-btn active" data-type="train-class1">
+								<span class="dot class1"></span> Class 1 (Train)
+							</button>
+							<button class="legend-btn active" data-type="test-correct">
+								<span class="dot correct"></span> Correct (Test)
+							</button>
+							<button class="legend-btn active" data-type="test-wrong">
+								<span class="dot wrong"></span> Wrong (Test)
+							</button>
+							<button class="legend-btn active" data-type="support-vectors">
+								<span class="ring"></span> Support Vectors
+							</button>
 						</div>
 
 						<!-- Metrics -->
@@ -176,9 +192,45 @@
 						<h2 id="modalTitle"><strong>3D Hyperplane</strong></h2>
 						<button id="closeModal" class="close-btn">✕</button>
 					</div>
+
+					<!-- Description Section -->
+					<div id="modalDescription" class="modal-description"></div>
+
 					<canvas id="hyperplaneCanvas" width="700" height="700"></canvas>
+
+					<!-- Modal Configuration Controls -->
+					<div class="modal-config">
+						<div class="modal-config-row">
+							<div class="modal-config-group">
+								<label>Samples</label>
+								<div class="toggle-buttons" id="modalSamplesButtons">
+									<button class="toggle-btn" data-samples="300">300</button>
+									<button class="toggle-btn active" data-samples="750">750</button>
+									<button class="toggle-btn" data-samples="1000">1000</button>
+								</div>
+							</div>
+							<div class="modal-config-group">
+								<label>Noise</label>
+								<div class="toggle-buttons" id="modalNoiseButtons">
+									<button class="toggle-btn active" data-noise="0.1">0.1</button>
+									<button class="toggle-btn" data-noise="0.3">0.3</button>
+									<button class="toggle-btn" data-noise="0.5">0.5</button>
+								</div>
+							</div>
+							<div class="modal-config-group" id="modalGammaGroup">
+								<label>RBF Gamma</label>
+								<div class="toggle-buttons" id="modalGammaButtons">
+									<button class="toggle-btn" data-gamma="0.5">0.5</button>
+									<button class="toggle-btn active" data-gamma="2">2</button>
+									<button class="toggle-btn" data-gamma="10">10</button>
+								</div>
+							</div>
+						</div>
+					</div>
+
 					<div class="modal-controls">
 						<p>Drag to rotate</p>
+						<button class="formation-btn" id="modal3DFormation">Animate Formation</button>
 						<button id="resetView" class="reset-btn">Reset</button>
 						<button id="toggleAnimation" class="reset-btn">Animate</button>
 					</div>

@@ -155,6 +155,12 @@
     font-size: 18px;
 }
 
+#svm-animation-container .plot-actions {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
 #svm-animation-container .hyperplane-btn {
     padding: 6px 14px;
     background: linear-gradient(135deg, #1976d2 0%, #42a5f5 100%);
@@ -163,6 +169,35 @@
     border-radius: 15px;
     cursor: pointer;
     font-size: 12px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+#svm-animation-container .hyperplane-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(25, 118, 210, 0.4);
+}
+
+/* Formation Animation Button */
+#svm-animation-container .formation-btn {
+    padding: 6px 14px;
+    background: linear-gradient(135deg, #7b1fa2 0%, #ba68c8 100%);
+    color: white;
+    border: none;
+    border-radius: 15px;
+    cursor: pointer;
+    font-size: 12px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+#svm-animation-container .formation-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(123, 31, 162, 0.4);
+}
+
+#svm-animation-container .formation-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
 }
 
 #svm-animation-container canvas {
@@ -182,6 +217,44 @@
     background: #f8f9fa;
     border-radius: 8px;
     flex-wrap: wrap;
+}
+
+/* Interactive Legend Buttons */
+#svm-animation-container .legend-btn {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    color: #546e7a;
+    background: white;
+    border: 2px solid #e0e0e0;
+    padding: 6px 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+#svm-animation-container .legend-btn:hover {
+    border-color: #1976d2;
+    background: #e3f2fd;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 8px rgba(25, 118, 210, 0.2);
+}
+
+#svm-animation-container .legend-btn.active {
+    background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+    border-color: #1976d2;
+    color: #1565c0;
+    font-weight: 600;
+}
+
+#svm-animation-container .legend-btn:not(.active) {
+    opacity: 0.5;
+}
+
+#svm-animation-container .legend-btn:not(.active):hover {
+    opacity: 0.7;
 }
 
 #svm-animation-container .legend-item {
@@ -371,6 +444,8 @@
     justify-content: center;
     z-index: 1000;
     transition: opacity 0.3s ease;
+    overflow-y: auto;
+    padding: 20px;
 }
 
 #svm-animation-container .modal.hidden {
@@ -381,10 +456,10 @@
 #svm-animation-container .modal-content {
     background: white;
     border-radius: 16px;
-    padding: 12px 18px;
-    max-width: 700px;
-    max-height: 92vh;
-    width: 90%;
+    padding: 25px;
+    max-width: 850px;
+    width: 95%;
+    max-height: 95vh;
     overflow-y: auto;
 }
 
@@ -392,8 +467,8 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 8px;
-    padding-bottom: 6px;
+    margin-bottom: 15px;
+    padding-bottom: 12px;
     border-bottom: 2px solid #e3f2fd;
 }
 
@@ -414,6 +489,66 @@
     display: flex;
     align-items: center;
     justify-content: center;
+}
+
+/* Modal Description */
+#svm-animation-container .modal-description {
+    background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
+    border-left: 4px solid #4caf50;
+    padding: 15px 18px;
+    margin-bottom: 15px;
+    border-radius: 0 8px 8px 0;
+    font-size: 13px;
+    line-height: 1.6;
+    color: #2e7d32;
+}
+
+#svm-animation-container .modal-description.linear {
+    background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+    border-left-color: #1976d2;
+    color: #1565c0;
+}
+
+#svm-animation-container .modal-description.rbf {
+    background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+    border-left-color: #1976d2;
+    color: #1565c0;
+}
+
+/* Modal Configuration Panel */
+#svm-animation-container .modal-config {
+    background: #f5f5f5;
+    border-radius: 10px;
+    padding: 15px;
+    margin: 15px 0;
+}
+
+#svm-animation-container .modal-config-row {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+#svm-animation-container .modal-config-group {
+    flex: 1;
+    min-width: 150px;
+}
+
+#svm-animation-container .modal-config-group label {
+    display: block;
+    color: #37474f;
+    font-size: 12px;
+    font-weight: 600;
+    margin-bottom: 6px;
+}
+
+#svm-animation-container .modal-config-group .toggle-buttons {
+    gap: 5px;
+}
+
+#svm-animation-container .modal-config-group .toggle-btn {
+    padding: 8px;
+    font-size: 12px;
 }
 
 #svm-animation-container #hyperplaneCanvas {
@@ -443,6 +578,12 @@
     cursor: pointer;
     font-size: 14px;
     margin: 0 5px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+#svm-animation-container .reset-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(25, 118, 210, 0.4);
 }
 
 /* Responsive */
@@ -465,5 +606,18 @@
 
     #svm-animation-container .sidebar {
         grid-template-columns: 1fr;
+    }
+
+    #svm-animation-container .plot-actions {
+        flex-direction: column;
+        gap: 5px;
+    }
+
+    #svm-animation-container .modal-config-row {
+        flex-direction: column;
+    }
+
+    #svm-animation-container .modal-config-group {
+        min-width: 100%;
     }
 }
