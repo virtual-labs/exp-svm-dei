@@ -2,246 +2,180 @@
 <html lang="en">
 
 <head>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Support Vector Machines (SVM) Experiment</title>
-	<!-- Google Fonts for premium typography -->
-	<link rel="preconnect" href="https://fonts.googleapis.com">
-	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-	<link
-		href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
-		rel="stylesheet">
-	<link rel="stylesheet" href="./css/main.css">
-	<link rel="stylesheet" href="./css/selector.css">
-	<link rel="stylesheet" href="./css/highlight.css">
-	<link rel="stylesheet" href="./css/svm_animation.css">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SVM Kernel Visualizer - Two Moons</title>
+    <link rel="stylesheet" href="style.css" />
 </head>
 
 <body>
-	<!-- Main Container -->
-	<div class="container" id="main-container">
-		<div class="main-layout">
-			<!-- SIDEBAR -->
-			<div class="sidebar">
-				<div class="sidebar-header">
-					<div class="corner-triangle-top-left"></div>
-					<h2 class="sidebar-title">STEPS</h2>
-				</div>
-				<div class="steps-container" id="stepsContainer">
-					<!-- Steps will be injected here by JS -->
-				</div>
-			</div>
+    <!-- Loading Screen -->
+    <div id="loadingScreen" class="loading-screen">
+        <div class="loading-content">
+            <div class="loader"></div>
+            <h2>Loading Assets</h2>
+            <p id="loadingText">Preparing visualization...</p>
+        </div>
+    </div>
 
-			<!-- RIGHT CONTENT AREA -->
-			<div class="content-area">
+    <!-- Main Application -->
+    <div id="mainApp" class="main-app hidden">
 
-				<!-- TOP PANE: Code Display -->
-				<div class="pane top-pane">
-					<div class="code-box-container">
-						<div id="codeHeaderBar" class="code-header-bar"></div>
-						<div class="code-box">
-							<pre id="codeDisplay">// Code will appear here</pre>
-							<button id="runBtn" class="run-button">
-								<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-									fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-									stroke-linejoin="round">
-									<polygon points="5 3 19 12 5 21 5 3"></polygon>
-								</svg>
-							</button>
-						</div>
-					</div>
-				</div>
+        <!-- Header -->
+        <header class="header">
+            <h1><strong>SVM Kernel Visualizer</strong></h1>
+            <p class="subtitle">Interactive Support Vector Machine - Two Moons Dataset</p>
+        </header>
 
-				<!-- BOTTOM PANE: Output Display -->
-				<div class="pane bottom-pane">
-					<div class="output-content" id="outputDisplay">
-						<!-- Output will appear here -->
-					</div>
-				</div>
+        <!-- Main Content -->
+        <section class="dataset-section">
+            <div class="layout">
+                <!-- Left: Visualization -->
+                <div class="viz-container">
+                    <!-- Plots -->
+                    <div class="dual-plots">
+                        <div class="plot-box">
+                            <div class="plot-header">
+                                <h3><strong>Linear Kernel</strong></h3>
+                                <div class="plot-actions">
+                                    <button class="formation-btn" data-kernel="linear">Animate Formation</button>
+                                    <button class="hyperplane-btn" data-kernel="linear-moons">View 3D</button>
+                                </div>
+                            </div>
+                            <canvas id="moonsLinearCanvas" width="600" height="600"></canvas>
+                        </div>
+                        <div class="plot-box">
+                            <div class="plot-header">
+                                <h3><strong>RBF Kernel</strong></h3>
+                                <div class="plot-actions">
+                                    <button class="formation-btn" data-kernel="rbf">Animate Formation</button>
+                                    <button class="hyperplane-btn" data-kernel="rbf-moons">View 3D</button>
+                                </div>
+                            </div>
+                            <canvas id="moonsRbfCanvas" width="600" height="600"></canvas>
+                        </div>
+                    </div>
 
-				<!-- DATASET SELECTOR PANE (Hidden) -->
-				<div class="metric-selector-pane" id="datasetSelectorPane" style="display: none;">
-					<div class="selector-card">
-						<h2>Select Dataset</h2>
-						<p>Choose the dataset to train and evaluate the SVM model.</p>
-						<div class="metric-options">
-							<div class="metric-option" onclick="selectDataset('wine')">
-								<h3>🍷 Wine Dataset</h3>
-								<p>Linearly separable data with 3 classes. Uses Linear Kernel SVM.</p>
-							</div>
-							<div class="metric-option" onclick="selectDataset('moons')">
-								<h3>🌙 Two Moons Dataset</h3>
-								<p>Non-linearly separable data. Compares Linear vs RBF Kernel SVM.</p>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
+                    <!-- Interactive Legend - Toggle Point Visibility -->
+                    <div class="legend">
+                        <button class="legend-btn active" data-type="train-class0">
+                            <span class="dot class0"></span> Class 0 (Train)
+                        </button>
+                        <button class="legend-btn active" data-type="train-class1">
+                            <span class="dot class1"></span> Class 1 (Train)
+                        </button>
+                        <button class="legend-btn active" data-type="test-correct">
+                            <span class="dot correct"></span> Correct (Test)
+                        </button>
+                        <button class="legend-btn active" data-type="test-wrong">
+                            <span class="dot wrong"></span> Wrong (Test)
+                        </button>
+                        <button class="legend-btn active" data-type="support-vectors">
+                            <span class="ring"></span> Support Vectors
+                        </button>
+                    </div>
 
-	<!-- SVM INTERACTIVE ANIMATION CONTAINER (Exact Port from Original) -->
-	<div id="svm-animation-container">
-		<!-- Header -->
-		<header class="header">
-			<button class="back-to-exp-btn">← Back to Experiment</button>
-			<h1><strong>SVM Kernel Visualizer</strong></h1>
-			<p class="subtitle">Interactive Support Vector Machine - Two Moons Dataset</p>
-		</header>
+                    <!-- Metrics -->
+                    <div class="dual-metrics">
+                        <div class="metrics-display" id="moonsLinearMetrics"></div>
+                        <div class="metrics-display" id="moonsRbfMetrics"></div>
+                    </div>
+                </div>
 
-		<!-- Main App (skipping loading screen for integrated mode) -->
-		<div id="svmMainApp" class="main-app">
-			<section class="dataset-section">
-				<div class="layout">
-					<!-- Left: Visualization -->
-					<div class="viz-container">
-						<!-- Plots -->
-						<div class="dual-plots">
-							<div class="plot-box">
-								<div class="plot-header">
-									<h3><strong>Linear Kernel</strong></h3>
-									<div class="plot-actions">
-										<button class="formation-btn" data-kernel="linear">Animate Formation</button>
-										<button class="hyperplane-btn" data-kernel="linear-moons">View 3D</button>
-									</div>
-								</div>
-								<canvas id="moonsLinearCanvas" width="600" height="600"></canvas>
-							</div>
-							<div class="plot-box">
-								<div class="plot-header">
-									<h3><strong>RBF Kernel</strong></h3>
-									<div class="plot-actions">
-										<button class="formation-btn" data-kernel="rbf">Animate Formation</button>
-										<button class="hyperplane-btn" data-kernel="rbf-moons">View 3D</button>
-									</div>
-								</div>
-								<canvas id="moonsRbfCanvas" width="600" height="600"></canvas>
-							</div>
-						</div>
+                <!-- Right: Controls -->
+                <div class="sidebar">
+                    <div class="panel">
+                        <h3><strong>Configuration</strong></h3>
+                        <div class="control-group">
+                            <label>Samples</label>
+                            <div class="toggle-buttons" id="samplesButtons">
+                                <button class="toggle-btn" data-samples="300">300</button>
+                                <button class="toggle-btn active" data-samples="750">750</button>
+                                <button class="toggle-btn" data-samples="1000">1000</button>
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label>Noise</label>
+                            <div class="toggle-buttons" id="noiseButtons">
+                                <button class="toggle-btn active" data-noise="0.1">0.1</button>
+                                <button class="toggle-btn" data-noise="0.3">0.3</button>
+                                <button class="toggle-btn" data-noise="0.5">0.5</button>
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label>RBF Gamma</label>
+                            <div class="toggle-buttons" id="gammaButtons">
+                                <button class="toggle-btn" data-gamma="0.5">0.5</button>
+                                <button class="toggle-btn active" data-gamma="2">2</button>
+                                <button class="toggle-btn" data-gamma="10">10</button>
+                            </div>
+                        </div>
+                    </div>
 
-						<!-- Interactive Legend - Toggle Point Visibility -->
-						<div class="legend">
-							<button class="legend-btn active" data-type="train-class0">
-								<span class="dot class0"></span> Class 0 (Train)
-							</button>
-							<button class="legend-btn active" data-type="train-class1">
-								<span class="dot class1"></span> Class 1 (Train)
-							</button>
-							<button class="legend-btn active" data-type="test-correct">
-								<span class="dot correct"></span> Correct (Test)
-							</button>
-							<button class="legend-btn active" data-type="test-wrong">
-								<span class="dot wrong"></span> Wrong (Test)
-							</button>
-							<button class="legend-btn active" data-type="support-vectors">
-								<span class="ring"></span> Support Vectors
-							</button>
-						</div>
+                    <div class="panel">
+                        <h3><strong>Overview</strong></h3>
+                        <p id="moonsDescription"></p>
+                        <div id="overviewDetails"></div>
+                        <div id="moonsStats"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
 
-						<!-- Metrics -->
-						<div class="dual-metrics">
-							<div class="metrics-display" id="moonsLinearMetrics"></div>
-							<div class="metrics-display" id="moonsRbfMetrics"></div>
-						</div>
-					</div>
+        <!-- 3D Modal -->
+        <div id="hyperplaneModal" class="modal hidden">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 id="modalTitle"><strong>3D Hyperplane</strong></h2>
+                    <button id="closeModal" class="close-btn">✕</button>
+                </div>
 
-					<!-- Right: Controls -->
-					<div class="sidebar">
-						<div class="panel">
-							<h3><strong>Configuration</strong></h3>
-							<div class="control-group">
-								<label>Samples</label>
-								<div class="toggle-buttons" id="samplesButtons">
-									<button class="toggle-btn" data-samples="300">300</button>
-									<button class="toggle-btn active" data-samples="750">750</button>
-									<button class="toggle-btn" data-samples="1000">1000</button>
-								</div>
-							</div>
-							<div class="control-group">
-								<label>Noise</label>
-								<div class="toggle-buttons" id="noiseButtons">
-									<button class="toggle-btn active" data-noise="0.1">0.1</button>
-									<button class="toggle-btn" data-noise="0.3">0.3</button>
-									<button class="toggle-btn" data-noise="0.5">0.5</button>
-								</div>
-							</div>
-							<div class="control-group">
-								<label>RBF Gamma</label>
-								<div class="toggle-buttons" id="gammaButtons">
-									<button class="toggle-btn" data-gamma="0.5">0.5</button>
-									<button class="toggle-btn active" data-gamma="2">2</button>
-									<button class="toggle-btn" data-gamma="10">10</button>
-								</div>
-							</div>
-						</div>
+                <!-- Description Section -->
+                <div id="modalDescription" class="modal-description"></div>
 
-						<div class="panel">
-							<h3><strong>Overview</strong></h3>
-							<p id="moonsDescription"></p>
-							<div id="overviewDetails"></div>
-							<div id="moonsStats"></div>
-						</div>
-					</div>
-				</div>
-			</section>
+                <canvas id="hyperplaneCanvas" width="700" height="500"></canvas>
 
-			<!-- 3D Modal -->
-			<div id="hyperplaneModal" class="modal hidden">
-				<div class="modal-content">
-					<div class="modal-header">
-						<h2 id="modalTitle"><strong>3D Hyperplane</strong></h2>
-						<button id="closeModal" class="close-btn">✕</button>
-					</div>
+                <!-- Modal Configuration Controls -->
+                <div class="modal-config">
+                    <div class="modal-config-row">
+                        <div class="modal-config-group">
+                            <label>Samples</label>
+                            <div class="toggle-buttons" id="modalSamplesButtons">
+                                <button class="toggle-btn" data-samples="300">300</button>
+                                <button class="toggle-btn active" data-samples="750">750</button>
+                                <button class="toggle-btn" data-samples="1000">1000</button>
+                            </div>
+                        </div>
+                        <div class="modal-config-group">
+                            <label>Noise</label>
+                            <div class="toggle-buttons" id="modalNoiseButtons">
+                                <button class="toggle-btn active" data-noise="0.1">0.1</button>
+                                <button class="toggle-btn" data-noise="0.3">0.3</button>
+                                <button class="toggle-btn" data-noise="0.5">0.5</button>
+                            </div>
+                        </div>
+                        <div class="modal-config-group" id="modalGammaGroup">
+                            <label>RBF Gamma</label>
+                            <div class="toggle-buttons" id="modalGammaButtons">
+                                <button class="toggle-btn" data-gamma="0.5">0.5</button>
+                                <button class="toggle-btn active" data-gamma="2">2</button>
+                                <button class="toggle-btn" data-gamma="10">10</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
-					<!-- Description Section -->
-					<div id="modalDescription" class="modal-description"></div>
+                <div class="modal-controls">
+                    <p>Drag to rotate</p>
+                    <button class="formation-btn" id="modal3DFormation">Animate Formation</button>
+                    <button id="resetView" class="reset-btn">Reset</button>
+                    <button id="toggleAnimation" class="reset-btn">Animate</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
-					<canvas id="hyperplaneCanvas" width="700" height="700"></canvas>
-
-					<!-- Modal Configuration Controls -->
-					<div class="modal-config">
-						<div class="modal-config-row">
-							<div class="modal-config-group">
-								<label>Samples</label>
-								<div class="toggle-buttons" id="modalSamplesButtons">
-									<button class="toggle-btn" data-samples="300">300</button>
-									<button class="toggle-btn active" data-samples="750">750</button>
-									<button class="toggle-btn" data-samples="1000">1000</button>
-								</div>
-							</div>
-							<div class="modal-config-group">
-								<label>Noise</label>
-								<div class="toggle-buttons" id="modalNoiseButtons">
-									<button class="toggle-btn active" data-noise="0.1">0.1</button>
-									<button class="toggle-btn" data-noise="0.3">0.3</button>
-									<button class="toggle-btn" data-noise="0.5">0.5</button>
-								</div>
-							</div>
-							<div class="modal-config-group" id="modalGammaGroup">
-								<label>RBF Gamma</label>
-								<div class="toggle-buttons" id="modalGammaButtons">
-									<button class="toggle-btn" data-gamma="0.5">0.5</button>
-									<button class="toggle-btn active" data-gamma="2">2</button>
-									<button class="toggle-btn" data-gamma="10">10</button>
-								</div>
-							</div>
-						</div>
-					</div>
-
-					<div class="modal-controls">
-						<p>Drag to rotate</p>
-						<button class="formation-btn" id="modal3DFormation">Animate Formation</button>
-						<button id="resetView" class="reset-btn">Reset</button>
-						<button id="toggleAnimation" class="reset-btn">Animate</button>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
-
-	<script src="./js/svm_data.js"></script>
-	<script src="./js/svm_animation.js"></script>
-	<script src="./js/main.js"></script>
+    <script src="script.js"></script>
 </body>
 
 </html>
