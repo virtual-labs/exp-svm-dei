@@ -951,6 +951,11 @@ plt.show()`,
     loadStep(4);
 }
 
+// Check if all steps are completed
+function checkAllStepsCompleted() {
+    return EXPERIMENT_STATE.stepsStatus.every(status => status.completed);
+}
+
 function renderSidebar() {
     stepsContainer.innerHTML = '';
 
@@ -990,11 +995,10 @@ function renderSidebar() {
 
     const downloadBtn = document.createElement('button');
     downloadBtn.classList.add('step-btn', 'download-btn');
+    downloadBtn.id = 'downloadExperimentBtn';
     downloadBtn.style.textAlign = 'center';
     downloadBtn.style.marginTop = "10px";
     downloadBtn.style.marginBottom = "20px";
-    downloadBtn.style.backgroundColor = "#F57C2A";
-    downloadBtn.style.color = "white";
     downloadBtn.innerHTML = `
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
             fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
@@ -1005,7 +1009,27 @@ function renderSidebar() {
         </svg>
         Download Experiment
     `;
-    downloadBtn.onclick = downloadTrainingAsPDF;
+
+    // Check if all steps are completed
+    const allCompleted = checkAllStepsCompleted();
+
+    if (allCompleted) {
+        downloadBtn.style.backgroundColor = "#F57C2A"; // Orange when enabled
+        downloadBtn.style.opacity = "1";
+        downloadBtn.style.cursor = "pointer";
+        downloadBtn.style.color = "white";
+        downloadBtn.disabled = false;
+        downloadBtn.onclick = downloadTrainingAsPDF;
+    } else {
+        downloadBtn.style.backgroundColor = "#ccc"; // Grey when disabled
+        downloadBtn.style.opacity = "0.7";
+        downloadBtn.style.cursor = "not-allowed";
+        downloadBtn.style.color = "white";
+        downloadBtn.disabled = true;
+        downloadBtn.title = "Complete all steps to download the report";
+        downloadBtn.onclick = null;
+    }
+
     stepsContainer.appendChild(downloadBtn);
 }
 
