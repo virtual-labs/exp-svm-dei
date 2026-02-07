@@ -1,13 +1,22 @@
 
 C:\Users\3337r\OneDrive\Desktop\Vlab\exp-svm-dei\experiment\simulation\js\svm_animation.js
     5:7   warning  'SVMAnimation' is assigned a value but never used  no-unused-vars
-   74:37  warning  'SVM_PLOT_DATA' is not defined                     no-undef
-  313:39  warning  'SVM_PLOT_DATA' is not defined                     no-undef
-  314:36  warning  'SVM_PLOT_DATA' is not defined                     no-undef
-  505:74  warning  'progress' is defined but never used               no-unused-vars
+  525:74  warning  'progress' is defined but never used               no-unused-vars
 
 C:\Users\3337r\OneDrive\Desktop\Vlab\exp-svm-dei\experiment\simulation\js\svm_data.js
   5:7  warning  'SVM_PLOT_DATA' is assigned a value but never used  no-unused-vars
+
+C:\Users\3337r\OneDrive\Desktop\Vlab\exp-svm-dei\experiment\simulation\script.js
+  463:15  warning  'val' is assigned a value but never used   no-unused-vars
+  573:79  warning  'progress' is defined but never used       no-unused-vars
+  618:42  warning  'bounds' is not defined                    no-undef
+  618:59  warning  'bounds' is not defined                    no-undef
+  618:74  warning  'bounds' is not defined                    no-undef
+  619:42  warning  'bounds' is not defined                    no-undef
+  619:59  warning  'bounds' is not defined                    no-undef
+  619:74  warning  'bounds' is not defined                    no-undef
+  688:19  warning  'midX' is assigned a value but never used  no-unused-vars
+  689:19  warning  'midY' is assigned a value but never used  no-unused-vars
 
 C:\Users\3337r\OneDrive\Desktop\Vlab\exp-svm-dei\experiment\simulation_backup\js\svm_animation.js
     5:7   warning  'SVMAnimation' is assigned a value but never used  no-unused-vars
@@ -19,5 +28,5 @@ C:\Users\3337r\OneDrive\Desktop\Vlab\exp-svm-dei\experiment\simulation_backup\js
 C:\Users\3337r\OneDrive\Desktop\Vlab\exp-svm-dei\experiment\simulation_backup\js\svm_data.js
   5:7  warning  'SVM_PLOT_DATA' is assigned a value but never used  no-unused-vars
 
-✖ 12 problems (0 errors, 12 warnings)
+✖ 19 problems (0 errors, 19 warnings)
 

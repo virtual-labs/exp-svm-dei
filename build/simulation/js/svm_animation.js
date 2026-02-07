@@ -65,18 +65,24 @@ const SVMAnimation = {
         }
     },
 
-    init() {
-        if (typeof SVM_PLOT_DATA === 'undefined') {
-            console.error('SVM_PLOT_DATA not found.');
+    async init() {
+        try {
+            const metaRes = await fetch('data/moons/metadata.json');
+            if (!metaRes.ok) throw new Error(`Metadata HTTP ${metaRes.status}`);
+            this.state.moons.metadata = await metaRes.json();
+        } catch (err) {
+            console.error('Failed to load Two Moons metadata:', err);
             return;
         }
 
-        this.state.moons.metadata = SVM_PLOT_DATA.metadata;
-        document.getElementById('moonsDescription').textContent = this.state.moons.metadata.description;
-        
+        const descEl = document.getElementById('moonsDescription');
+        if (descEl && this.state.moons.metadata && this.state.moons.metadata.description) {
+            descEl.textContent = this.state.moons.metadata.description;
+        }
+
         this.updateOverview();
         this.setupEventListeners();
-        this.loadMoonsData();
+        await this.loadMoonsData();
 
         const mainApp = document.getElementById('svmMainApp');
         if (mainApp) mainApp.classList.remove('hidden');
@@ -296,8 +302,8 @@ const SVMAnimation = {
         configButtons.forEach(btn => { btn.disabled = allHidden; });
     },
 
-    loadMoonsDataAndUpdate3D() {
-        this.loadMoonsData();
+    async loadMoonsDataAndUpdate3D() {
+        await this.loadMoonsData();
         if (this.currentHyperplaneKernel) {
             this.currentHyperplaneData = this.currentHyperplaneKernel.includes('linear') 
                 ? this.state.moons.linearData 
@@ -306,12 +312,26 @@ const SVMAnimation = {
         }
     },
 
-    loadMoonsData() {
+    async loadMoonsData() {
         const { samples, noise, gamma } = this.state.moons;
-        const configKey = `${samples}_${noise}`;
+        const cacheBust = Date.now();
 
-        this.state.moons.linearData = SVM_PLOT_DATA.moons.linear[configKey];
-        this.state.moons.rbfData = SVM_PLOT_DATA.moons.rbf[gamma][configKey];
+        try {
+            const [linearRes, rbfRes] = await Promise.all([
+                fetch(`data/moons/linear/samples_${samples}_noise_${noise}/data.json?t=${cacheBust}`),
+                fetch(`data/moons/rbf/gamma_${gamma}/samples_${samples}_noise_${noise}/data.json?t=${cacheBust}`)
+            ]);
+
+            if (!linearRes.ok || !rbfRes.ok) {
+                throw new Error(`Data HTTP error linear=${linearRes.status} rbf=${rbfRes.status}`);
+            }
+
+            this.state.moons.linearData = await linearRes.json();
+            this.state.moons.rbfData = await rbfRes.json();
+        } catch (err) {
+            console.error('Error loading Two Moons data:', err);
+            return;
+        }
 
         this.renderMoonsPlots();
     },
