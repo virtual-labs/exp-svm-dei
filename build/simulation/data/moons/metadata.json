@@ -1,0 +1,1 @@
+{"dataset":"two_moons","description":"Two interleaving half circles (moons) used to demonstrate non-linear classification. This dataset is a classic example where linear classifiers fail and RBF kernels excel.","sample_sizes":[300,750,1000],"noise_levels":[0.1,0.3,0.5],"gammas":[0.5,2,10],"grid_size":200}
