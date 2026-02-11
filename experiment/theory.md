@@ -74,3 +74,30 @@ In the figure given below, Linear Kernel (left) is unable to separate a single '
 - **High training time for large datasets:** SVM training can be slow and computationally expensive when the dataset is very large, particularly when non-linear kernels are used.
 - **Sensitive to parameter selection:** The performance of SVM strongly depends on choosing the right kernel and hyper-parameters. Incorrect values can lead to poor classification results.
 - **Harder to interpret results:** Unlike simpler models such as Linear Regression or Decision Trees, especially SVMs with non-linear kernels do not provide clear insights into how individual features might affect predictions.
+
+#### 7. Algorithm
+
+1. **Step 1:** Given training data with two classes (+1 and -1)
+2. **Step 2:** Find hyperplane: `w·x + b = 0`
+    - w = weight vector (perpendicular to hyperplane)
+    - b = bias term
+3. **Step 3:** Define margin constraints:
+    - For class +1 points: `w·xᵢ + b ≥ +1`
+    - For class -1 points: `w·xᵢ + b ≤ -1`
+    - Combined: `yᵢ(w·xᵢ + b) ≥ 1`
+4. **Step 4:** Margin width = `2/||w||`
+5. **Step 5:** Optimization problem:
+    - Minimize: `(1/2)||w||²`
+    - Subject to: `yᵢ(w·xᵢ + b) ≥ 1` for all i
+6. **Step 6:** Solve using Lagrange multipliers:
+    - Convert to dual form
+    - Find αᵢ values for each training point
+    - Support vectors are points where αᵢ > 0
+7. **Step 7:** For non-linear data, apply **Kernel Trick**:
+    - **RBF Kernel:** `K(x,x') = exp(-γ||x-x'||²)`
+    - **Polynomial Kernel:** `K(x,x') = (x·x' + c)ᵈ`
+    - Maps data to higher dimension where linear separation is possible
+8. **Step 8:** For prediction:
+    - Calculate: `f(x) = Σ(αᵢ × yᵢ × K(xᵢ,x)) + b`
+    - If `f(x) ≥ 0` then it belongs to Class +1, otherwise, it belongs to class -1
+

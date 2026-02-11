@@ -647,6 +647,8 @@ plt.show()`,
 ];
 
 let STEPS = [];
+let hasCompletedOnce = sessionStorage.getItem('svm_completed') === 'true';
+
 let EXPERIMENT_STATE = {
     stepIndex: 0,
     subStepIndex: 0,
@@ -1010,8 +1012,8 @@ function renderSidebar() {
         Download Experiment
     `;
 
-    // Check if all steps are completed
-    const allCompleted = checkAllStepsCompleted();
+    // Check if all steps are completed (or were completed before a restart)
+    const allCompleted = checkAllStepsCompleted() || hasCompletedOnce;
 
     if (allCompleted) {
         downloadBtn.style.backgroundColor = "#F57C2A"; // Orange when enabled
@@ -1178,6 +1180,8 @@ function nextSubStep() {
 }
 
 function showCompletionMessage() {
+    hasCompletedOnce = true;
+    sessionStorage.setItem('svm_completed', 'true');
     outputDisplay.innerHTML = `
         <style>
             @keyframes clap {
