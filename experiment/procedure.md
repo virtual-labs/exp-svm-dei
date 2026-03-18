@@ -1,4 +1,4 @@
-#### Part 1: Linear SVM on Wine Recognition Dataset
+## Part 1: Linear SVM on Wine Recognition Dataset
 
 The objective of this part of the experiment is to implement a Support Vector Machine (SVM) classifier on a real-world dataset to study linear class separability. The Wine Recognition dataset is used, where selected chemical attributes are employed to classify three types of wines: Barolo, Grignolino, and Barbera. This part focuses on understanding linear decision boundaries, margin maximization, and the effect of feature selection on classification accuracy.
 
@@ -39,7 +39,7 @@ The objective of this part of the experiment is to implement a Support Vector Ma
 
 ---
 
-#### Part 2: Non-Linear SVM on Two Moons Dataset
+## Part 2: Non-Linear SVM on Two Moons Dataset
 
 The Two Moons dataset is used to demonstrate the limitations of linear classifiers and the necessity of kernel-based transformations. By applying an RBF kernel, this part highlights how kernel selection enables flexible decision boundaries and improves classification performance on non-linearly structured data.
 
