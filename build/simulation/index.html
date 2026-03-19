@@ -80,16 +80,21 @@
         </div>
     </div>
 
-    <!-- SVM INTERACTIVE ANIMATION CONTAINER (Exact Port from Original) -->
+    <!-- SVM INTERACTIVE ANIMATION CONTAINER -->
     <div id="svm-animation-container">
         <!-- Header -->
         <header class="header">
             <button class="back-to-exp-btn">← Back to Experiment</button>
             <h1><strong>SVM Kernel Visualizer</strong></h1>
-            <p class="subtitle">Interactive Support Vector Machine - Two Moons Dataset</p>
+            <p class="subtitle">Interactive Support Vector Machine Simulator</p>
+            <!-- Dataset Toggle -->
+            <div class="dataset-toggle" id="datasetToggle">
+                <button class="dataset-toggle-btn active" data-dataset="moons">Two Moons</button>
+                <button class="dataset-toggle-btn" data-dataset="xor">XOR</button>
+            </div>
         </header>
 
-        <!-- Main App (skipping loading screen for integrated mode) -->
+        <!-- Main App -->
         <div id="svmMainApp" class="main-app">
             <section class="dataset-section">
                 <div class="layout">
@@ -119,7 +124,7 @@
                             </div>
                         </div>
 
-                        <!-- Interactive Legend - Toggle Point Visibility -->
+                        <!-- Interactive Legend -->
                         <div class="legend">
                             <button class="legend-btn active" data-type="train-class0">
                                 <span class="dot class0"></span> Class 0 (Train)
@@ -136,6 +141,9 @@
                             <button class="legend-btn active" data-type="support-vectors">
                                 <span class="ring"></span> Support Vectors
                             </button>
+                            <button class="legend-btn active" data-type="margin-lines">
+                                <span class="margin-icon"></span> Margin Lines
+                            </button>
                         </div>
 
                         <!-- Metrics -->
@@ -150,27 +158,35 @@
                         <div class="panel">
                             <h3><strong>Configuration</strong></h3>
                             <div class="control-group">
-                                <label>Samples</label>
-                                <div class="toggle-buttons" id="samplesButtons">
-                                    <button class="toggle-btn" data-samples="300">300</button>
-                                    <button class="toggle-btn active" data-samples="750">750</button>
-                                    <button class="toggle-btn" data-samples="1000">1000</button>
+                                <label>Samples <span class="val-display" id="samplesVal">750</span></label>
+                                <div class="slider-container">
+                                    <input type="range" min="0" max="4" step="1" value="3" class="config-slider"
+                                        id="samplesSlider">
+                                    <div class="slider-ticks" id="samplesTicks"></div>
                                 </div>
                             </div>
                             <div class="control-group">
-                                <label>Noise</label>
-                                <div class="toggle-buttons" id="noiseButtons">
-                                    <button class="toggle-btn active" data-noise="0.1">0.1</button>
-                                    <button class="toggle-btn" data-noise="0.3">0.3</button>
-                                    <button class="toggle-btn" data-noise="0.5">0.5</button>
+                                <label>Noise <span class="val-display" id="noiseVal">0.1</span></label>
+                                <div class="slider-container">
+                                    <input type="range" min="0" max="4" step="1" value="0" class="config-slider"
+                                        id="noiseSlider">
+                                    <div class="slider-ticks" id="noiseTicks"></div>
                                 </div>
                             </div>
                             <div class="control-group">
-                                <label>RBF Gamma</label>
-                                <div class="toggle-buttons" id="gammaButtons">
-                                    <button class="toggle-btn" data-gamma="0.5">0.5</button>
-                                    <button class="toggle-btn active" data-gamma="2">2</button>
-                                    <button class="toggle-btn" data-gamma="10">10</button>
+                                <label>C (Regularization) <span class="val-display" id="cVal">1</span></label>
+                                <div class="slider-container">
+                                    <input type="range" min="0" max="4" step="1" value="1" class="config-slider"
+                                        id="cSlider">
+                                    <div class="slider-ticks" id="cTicks"></div>
+                                </div>
+                            </div>
+                            <div class="control-group">
+                                <label>RBF Gamma <span class="val-display" id="gammaVal">2</span></label>
+                                <div class="slider-container">
+                                    <input type="range" min="0" max="4" step="1" value="2" class="config-slider"
+                                        id="gammaSlider">
+                                    <div class="slider-ticks" id="gammaTicks"></div>
                                 </div>
                             </div>
                         </div>
@@ -202,27 +218,31 @@
                     <div class="modal-config">
                         <div class="modal-config-row">
                             <div class="modal-config-group">
-                                <label>Samples</label>
-                                <div class="toggle-buttons" id="modalSamplesButtons">
-                                    <button class="toggle-btn" data-samples="300">300</button>
-                                    <button class="toggle-btn active" data-samples="750">750</button>
-                                    <button class="toggle-btn" data-samples="1000">1000</button>
+                                <label>Samples <span class="val-display" id="modalSamplesVal">750</span></label>
+                                <div class="slider-container">
+                                    <input type="range" min="0" max="4" step="1" value="3" class="config-slider"
+                                        id="modalSamplesSlider">
                                 </div>
                             </div>
                             <div class="modal-config-group">
-                                <label>Noise</label>
-                                <div class="toggle-buttons" id="modalNoiseButtons">
-                                    <button class="toggle-btn active" data-noise="0.1">0.1</button>
-                                    <button class="toggle-btn" data-noise="0.3">0.3</button>
-                                    <button class="toggle-btn" data-noise="0.5">0.5</button>
+                                <label>Noise <span class="val-display" id="modalNoiseVal">0.1</span></label>
+                                <div class="slider-container">
+                                    <input type="range" min="0" max="4" step="1" value="0" class="config-slider"
+                                        id="modalNoiseSlider">
+                                </div>
+                            </div>
+                            <div class="modal-config-group">
+                                <label>C <span class="val-display" id="modalCVal">1</span></label>
+                                <div class="slider-container">
+                                    <input type="range" min="0" max="4" step="1" value="1" class="config-slider"
+                                        id="modalCSlider">
                                 </div>
                             </div>
                             <div class="modal-config-group" id="modalGammaGroup">
-                                <label>RBF Gamma</label>
-                                <div class="toggle-buttons" id="modalGammaButtons">
-                                    <button class="toggle-btn" data-gamma="0.5">0.5</button>
-                                    <button class="toggle-btn active" data-gamma="2">2</button>
-                                    <button class="toggle-btn" data-gamma="10">10</button>
+                                <label>RBF Gamma <span class="val-display" id="modalGammaVal">2</span></label>
+                                <div class="slider-container">
+                                    <input type="range" min="0" max="4" step="1" value="2" class="config-slider"
+                                        id="modalGammaSlider">
                                 </div>
                             </div>
                         </div>

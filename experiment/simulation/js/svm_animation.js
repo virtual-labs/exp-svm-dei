@@ -1,14 +1,23 @@
 /**
- * SVM Animation Module - Complete Port from SVM-final
- * Includes: Formation animation, Interactive legend, Modal config, 3D formation
+ * SVM Animation Module - Updated with sliders, C param, XOR, margin lines
  */
 const SVMAnimation = {
+    // Config maps for slider index -> value
+    CONFIG: {
+        samples: [100, 300, 500, 750, 1000],
+        noise: [0.1, 0.2, 0.3, 0.4, 0.5],
+        c: [0.1, 1, 10, 100, 1000],
+        gamma: [0.1, 0.5, 2, 5, 10]
+    },
+
     state: {
+        dataset: 'moons', // 'moons' or 'xor'
         moons: {
             metadata: null,
             samples: 750,
             noise: 0.1,
             gamma: 2,
+            cValue: 1,
             linearData: null,
             rbfData: null
         },
@@ -21,7 +30,8 @@ const SVMAnimation = {
             'train-class1': true,
             'test-correct': true,
             'test-wrong': true,
-            'support-vectors': true
+            'support-vectors': true,
+            'margin-lines': true
         }
     },
 
@@ -33,13 +43,17 @@ const SVMAnimation = {
         testWrong: '#f44336'
     },
 
+    datasetDescriptions: {
+        moons: "Two interleaving half circles (moons) used to demonstrate non-linear classification. This dataset is a classic example where linear classifiers fail and RBF kernels excel.",
+        xor: "XOR (exclusive-or) pattern with 4 clusters arranged diagonally. Class 0 occupies top-right and bottom-left, Class 1 occupies top-left and bottom-right. Linear classifiers cannot solve this; RBF kernels can capture the non-linear boundary."
+    },
+
     kernelDescriptions: {
         linear: "In the Linear kernel approach, a hyperplane is constructed in the original feature space to maximally separate the two classes. The decision boundary is a straight line (in 2D) or a flat surface (in higher dimensions). Support vectors are the data points lying closest to the decision boundary that define the optimal separating hyperplane.",
         rbf: "In the RBF kernel approach, input data points are implicitly projected into a higher-dimensional feature space via the radial basis function transformation. Within this augmented space, a hyperplane is constructed such that it maximally separates the two classes. The data points lying on the margin boundaries, termed support vectors, define the optimal decision surface."
     },
 
     BOUNDARY_RESOLUTION: 400,
-
     hyperplaneRotation: { x: 0.5, y: 0.3 },
     isDragging: false,
     lastMouse: { x: 0, y: 0 },
@@ -51,37 +65,46 @@ const SVMAnimation = {
 
     show() {
         const container = document.getElementById('svm-animation-container');
+        const mainContainer = document.getElementById('main-container');
         if (container) {
             container.style.display = 'block';
+            if (mainContainer) mainContainer.style.display = 'none';
             this.init();
         }
     },
 
     hide() {
         const container = document.getElementById('svm-animation-container');
+        const mainContainer = document.getElementById('main-container');
         if (container) {
             container.style.display = 'none';
+            if (mainContainer) mainContainer.style.display = 'block';
             this.closeModal();
         }
     },
 
     async init() {
         try {
-            const metaRes = await fetch('data/moons/metadata.json');
+            const ds = this.state.dataset;
+            const metaRes = await fetch(`data/${ds}/metadata.json`);
             if (!metaRes.ok) throw new Error(`Metadata HTTP ${metaRes.status}`);
             this.state.moons.metadata = await metaRes.json();
         } catch (err) {
-            console.error('Failed to load Two Moons metadata:', err);
+            console.error('Failed to load metadata:', err);
             return;
         }
 
         const descEl = document.getElementById('moonsDescription');
-        if (descEl && this.state.moons.metadata && this.state.moons.metadata.description) {
-            descEl.textContent = this.state.moons.metadata.description;
+        if (descEl) {
+            descEl.textContent = this.datasetDescriptions[this.state.dataset];
         }
 
+        this.populateSliderTicks();
         this.updateOverview();
-        this.setupEventListeners();
+        if (!this._listenersSetup) {
+            this.setupEventListeners();
+            this._listenersSetup = true;
+        }
         await this.loadMoonsData();
 
         const mainApp = document.getElementById('svmMainApp');
@@ -96,15 +119,46 @@ const SVMAnimation = {
         }
     },
 
+    populateSliderTicks() {
+        const tickConfigs = [
+            { id: 'samplesTicks', values: this.CONFIG.samples },
+            { id: 'noiseTicks', values: this.CONFIG.noise },
+            { id: 'cTicks', values: this.CONFIG.c },
+            { id: 'gammaTicks', values: this.CONFIG.gamma }
+        ];
+        tickConfigs.forEach(cfg => {
+            const el = document.getElementById(cfg.id);
+            if (el) {
+                el.innerHTML = cfg.values.map(v => `<span>${v}</span>`).join('');
+            }
+        });
+    },
+
+    getSliderValue(sliderId, configKey) {
+        const slider = document.getElementById(sliderId);
+        if (!slider) return this.CONFIG[configKey][0];
+        return this.CONFIG[configKey][parseInt(slider.value)];
+    },
+
+    setSliderByValue(sliderId, valDisplayId, configKey, value) {
+        const idx = this.CONFIG[configKey].indexOf(value);
+        if (idx === -1) return;
+        const slider = document.getElementById(sliderId);
+        const display = document.getElementById(valDisplayId);
+        if (slider) slider.value = idx;
+        if (display) display.textContent = value;
+    },
+
     updateOverview() {
         const trainSamples = Math.floor(this.state.moons.samples * 0.8);
         const testSamples = this.state.moons.samples - trainSamples;
+        const dsName = this.state.dataset === 'moons' ? 'Two Moons' : 'XOR';
 
         const overview = document.getElementById('overviewDetails');
         if (overview) {
             overview.innerHTML = `
                 <table class="overview-table">
-                    <tr><th>Dataset</th><td>Two Moons</td></tr>
+                    <tr><th>Dataset</th><td>${dsName}</td></tr>
                     <tr><th>Total Samples</th><td>${this.state.moons.samples}</td></tr>
                     <tr><th>Train (80%)</th><td>${trainSamples}</td></tr>
                     <tr><th>Test (20%)</th><td>${testSamples}</td></tr>
@@ -120,14 +174,39 @@ const SVMAnimation = {
         const container = '#svm-animation-container';
 
         const backBtn = document.querySelector(`${container} .back-to-exp-btn`);
-        if (backBtn) backBtn.onclick = () => self.hide();
+        if (backBtn) {
+            backBtn.addEventListener('click', () => self.hide());
+        }
 
+        // Dataset toggle
+        document.querySelectorAll(`${container} .dataset-toggle-btn`).forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const ds = e.target.dataset.dataset;
+                if (ds === self.state.dataset) return;
+                document.querySelectorAll(`${container} .dataset-toggle-btn`).forEach(b => b.classList.remove('active'));
+                e.target.classList.add('active');
+                self.state.dataset = ds;
+                self.state.formation.firstLoad = true;
+                const descEl = document.getElementById('moonsDescription');
+                if (descEl) descEl.textContent = self.datasetDescriptions[ds];
+                self.init();
+            });
+        });
+
+        // Legend buttons
         document.querySelectorAll(`${container} .legend-btn`).forEach(btn => {
             btn.addEventListener('click', (e) => {
                 const type = e.currentTarget.dataset.type;
+
+                if (type === 'margin-lines') {
+                    self.state.visibility['margin-lines'] = !self.state.visibility['margin-lines'];
+                    e.currentTarget.classList.toggle('active', self.state.visibility['margin-lines']);
+                    self.renderMoonsPlots();
+                    return;
+                }
+
                 const trainingGroup = ['train-class0', 'train-class1', 'support-vectors'];
                 const testGroup = ['test-correct', 'test-wrong'];
-
                 let group = null;
                 if (trainingGroup.includes(type)) group = trainingGroup;
                 else if (testGroup.includes(type)) group = testGroup;
@@ -146,36 +225,28 @@ const SVMAnimation = {
             });
         });
 
-        document.querySelectorAll(`${container} #samplesButtons .toggle-btn`).forEach(btn => {
-            btn.onclick = (e) => {
-                document.querySelectorAll(`${container} #samplesButtons .toggle-btn`).forEach(b => b.classList.remove('active'));
-                e.target.classList.add('active');
-                self.state.moons.samples = parseInt(e.target.dataset.samples);
-                self.syncModalControls();
-                self.updateOverview();
-                self.loadMoonsData();
-            };
+        // Sidebar sliders
+        this.setupSlider('samplesSlider', 'samplesVal', 'samples', (val) => {
+            self.state.moons.samples = val;
+            self.syncModalControls();
+            self.updateOverview();
+            self.loadMoonsData();
         });
-
-        document.querySelectorAll(`${container} #noiseButtons .toggle-btn`).forEach(btn => {
-            btn.onclick = (e) => {
-                document.querySelectorAll(`${container} #noiseButtons .toggle-btn`).forEach(b => b.classList.remove('active'));
-                e.target.classList.add('active');
-                self.state.moons.noise = parseFloat(e.target.dataset.noise);
-                self.syncModalControls();
-                self.updateOverview();
-                self.loadMoonsData();
-            };
+        this.setupSlider('noiseSlider', 'noiseVal', 'noise', (val) => {
+            self.state.moons.noise = val;
+            self.syncModalControls();
+            self.updateOverview();
+            self.loadMoonsData();
         });
-
-        document.querySelectorAll(`${container} #gammaButtons .toggle-btn`).forEach(btn => {
-            btn.onclick = (e) => {
-                document.querySelectorAll(`${container} #gammaButtons .toggle-btn`).forEach(b => b.classList.remove('active'));
-                e.target.classList.add('active');
-                self.state.moons.gamma = parseFloat(e.target.dataset.gamma);
-                self.syncModalControls();
-                self.loadMoonsData();
-            };
+        this.setupSlider('cSlider', 'cVal', 'c', (val) => {
+            self.state.moons.cValue = val;
+            self.syncModalControls();
+            self.loadMoonsData();
+        });
+        this.setupSlider('gammaSlider', 'gammaVal', 'gamma', (val) => {
+            self.state.moons.gamma = val;
+            self.syncModalControls();
+            self.loadMoonsData();
         });
 
         this.setupModalConfigListeners();
@@ -210,73 +281,67 @@ const SVMAnimation = {
         if (toggleAnim) toggleAnim.onclick = () => self.toggleAnimation();
     },
 
+    setupSlider(sliderId, displayId, configKey, onChange) {
+        const slider = document.getElementById(sliderId);
+        const display = document.getElementById(displayId);
+        if (!slider) return;
+        const self = this;
+        slider.addEventListener('input', () => {
+            const val = self.CONFIG[configKey][parseInt(slider.value)];
+            if (display) display.textContent = val;
+        });
+        slider.addEventListener('change', () => {
+            const val = self.CONFIG[configKey][parseInt(slider.value)];
+            onChange(val);
+        });
+    },
+
     setupModalConfigListeners() {
         const self = this;
-        const container = '#svm-animation-container';
-
-        document.querySelectorAll(`${container} #modalSamplesButtons .toggle-btn`).forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                document.querySelectorAll(`${container} #modalSamplesButtons .toggle-btn`).forEach(b => b.classList.remove('active'));
-                e.target.classList.add('active');
-                self.state.moons.samples = parseInt(e.target.dataset.samples);
-                self.syncSidebarControls();
-                self.updateOverview();
-                self.loadMoonsDataAndUpdate3D();
-            });
+        this.setupSlider('modalSamplesSlider', 'modalSamplesVal', 'samples', (val) => {
+            self.state.moons.samples = val;
+            self.syncSidebarControls();
+            self.updateOverview();
+            self.loadMoonsDataAndUpdate3D();
         });
-
-        document.querySelectorAll(`${container} #modalNoiseButtons .toggle-btn`).forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                document.querySelectorAll(`${container} #modalNoiseButtons .toggle-btn`).forEach(b => b.classList.remove('active'));
-                e.target.classList.add('active');
-                self.state.moons.noise = parseFloat(e.target.dataset.noise);
-                self.syncSidebarControls();
-                self.updateOverview();
-                self.loadMoonsDataAndUpdate3D();
-            });
+        this.setupSlider('modalNoiseSlider', 'modalNoiseVal', 'noise', (val) => {
+            self.state.moons.noise = val;
+            self.syncSidebarControls();
+            self.updateOverview();
+            self.loadMoonsDataAndUpdate3D();
         });
-
-        document.querySelectorAll(`${container} #modalGammaButtons .toggle-btn`).forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                document.querySelectorAll(`${container} #modalGammaButtons .toggle-btn`).forEach(b => b.classList.remove('active'));
-                e.target.classList.add('active');
-                self.state.moons.gamma = parseFloat(e.target.dataset.gamma);
-                self.syncSidebarControls();
-                self.loadMoonsDataAndUpdate3D();
-            });
+        this.setupSlider('modalCSlider', 'modalCVal', 'c', (val) => {
+            self.state.moons.cValue = val;
+            self.syncSidebarControls();
+            self.loadMoonsDataAndUpdate3D();
+        });
+        this.setupSlider('modalGammaSlider', 'modalGammaVal', 'gamma', (val) => {
+            self.state.moons.gamma = val;
+            self.syncSidebarControls();
+            self.loadMoonsDataAndUpdate3D();
         });
     },
 
     syncModalControls() {
-        const container = '#svm-animation-container';
-        document.querySelectorAll(`${container} #modalSamplesButtons .toggle-btn`).forEach(b => {
-            b.classList.toggle('active', parseInt(b.dataset.samples) === this.state.moons.samples);
-        });
-        document.querySelectorAll(`${container} #modalNoiseButtons .toggle-btn`).forEach(b => {
-            b.classList.toggle('active', parseFloat(b.dataset.noise) === this.state.moons.noise);
-        });
-        document.querySelectorAll(`${container} #modalGammaButtons .toggle-btn`).forEach(b => {
-            b.classList.toggle('active', parseFloat(b.dataset.gamma) === this.state.moons.gamma);
-        });
+        this.setSliderByValue('modalSamplesSlider', 'modalSamplesVal', 'samples', this.state.moons.samples);
+        this.setSliderByValue('modalNoiseSlider', 'modalNoiseVal', 'noise', this.state.moons.noise);
+        this.setSliderByValue('modalCSlider', 'modalCVal', 'c', this.state.moons.cValue);
+        this.setSliderByValue('modalGammaSlider', 'modalGammaVal', 'gamma', this.state.moons.gamma);
     },
 
     syncSidebarControls() {
-        const container = '#svm-animation-container';
-        document.querySelectorAll(`${container} #samplesButtons .toggle-btn`).forEach(b => {
-            b.classList.toggle('active', parseInt(b.dataset.samples) === this.state.moons.samples);
-        });
-        document.querySelectorAll(`${container} #noiseButtons .toggle-btn`).forEach(b => {
-            b.classList.toggle('active', parseFloat(b.dataset.noise) === this.state.moons.noise);
-        });
-        document.querySelectorAll(`${container} #gammaButtons .toggle-btn`).forEach(b => {
-            b.classList.toggle('active', parseFloat(b.dataset.gamma) === this.state.moons.gamma);
-        });
+        this.setSliderByValue('samplesSlider', 'samplesVal', 'samples', this.state.moons.samples);
+        this.setSliderByValue('noiseSlider', 'noiseVal', 'noise', this.state.moons.noise);
+        this.setSliderByValue('cSlider', 'cVal', 'c', this.state.moons.cValue);
+        this.setSliderByValue('gammaSlider', 'gammaVal', 'gamma', this.state.moons.gamma);
     },
 
     updateFormationButtonsState() {
         const container = '#svm-animation-container';
-        const allVisible = Object.values(this.state.visibility).every(v => v === true);
-        const allHidden = Object.values(this.state.visibility).every(v => v === false);
+        const coreVis = { ...this.state.visibility };
+        delete coreVis['margin-lines'];
+        const allVisible = Object.values(coreVis).every(v => v === true);
+        const allHidden = Object.values(coreVis).every(v => v === false);
 
         document.querySelectorAll(`${container} .formation-btn[data-kernel]`).forEach(btn => {
             btn.disabled = !allVisible;
@@ -286,40 +351,32 @@ const SVMAnimation = {
         const modalFormationBtn = document.getElementById('modal3DFormation');
         if (modalFormationBtn) {
             modalFormationBtn.disabled = !allVisible;
-            modalFormationBtn.title = !allVisible ? 'Enable all legend items to use formation animation' : '';
         }
 
         document.querySelectorAll(`${container} .hyperplane-btn`).forEach(btn => {
             btn.disabled = allHidden;
-            btn.title = allHidden ? 'Enable legend items to view 3D' : '';
         });
-
-        const configButtons = [
-            ...document.querySelectorAll(`${container} #samplesButtons .toggle-btn`),
-            ...document.querySelectorAll(`${container} #noiseButtons .toggle-btn`),
-            ...document.querySelectorAll(`${container} #gammaButtons .toggle-btn`)
-        ];
-        configButtons.forEach(btn => { btn.disabled = allHidden; });
     },
 
     async loadMoonsDataAndUpdate3D() {
         await this.loadMoonsData();
         if (this.currentHyperplaneKernel) {
-            this.currentHyperplaneData = this.currentHyperplaneKernel.includes('linear') 
-                ? this.state.moons.linearData 
+            this.currentHyperplaneData = this.currentHyperplaneKernel.includes('linear')
+                ? this.state.moons.linearData
                 : this.state.moons.rbfData;
             this.renderHyperplane();
         }
     },
 
     async loadMoonsData() {
-        const { samples, noise, gamma } = this.state.moons;
+        const { samples, noise, gamma, cValue } = this.state.moons;
+        const ds = this.state.dataset;
         const cacheBust = Date.now();
 
         try {
             const [linearRes, rbfRes] = await Promise.all([
-                fetch(`data/moons/linear/samples_${samples}_noise_${noise}/data.json?t=${cacheBust}`),
-                fetch(`data/moons/rbf/gamma_${gamma}/samples_${samples}_noise_${noise}/data.json?t=${cacheBust}`)
+                fetch(`data/${ds}/linear/C_${cValue}/samples_${samples}_noise_${noise}/data.json?t=${cacheBust}`),
+                fetch(`data/${ds}/rbf/C_${cValue}/gamma_${gamma}/samples_${samples}_noise_${noise}/data.json?t=${cacheBust}`)
             ]);
 
             if (!linearRes.ok || !rbfRes.ok) {
@@ -329,7 +386,7 @@ const SVMAnimation = {
             this.state.moons.linearData = await linearRes.json();
             this.state.moons.rbfData = await rbfRes.json();
         } catch (err) {
-            console.error('Error loading Two Moons data:', err);
+            console.error('Error loading data:', err);
             return;
         }
 
@@ -352,9 +409,7 @@ const SVMAnimation = {
         function animate() {
             const progress = stages[stageIndex];
             const sampleCount = Math.floor(data.train_points.length * progress);
-
             self.renderPartialPlot(canvas, data, sampleCount, progress);
-
             if (stageIndex < stages.length - 1) {
                 stageIndex++;
                 setTimeout(animate, delay);
@@ -385,6 +440,11 @@ const SVMAnimation = {
             this.drawAnimatedBoundary(ctx, boundary, bounds, w, h, padding, gridSize, Math.min(1, progress * 1.2));
         }
 
+        // Draw margin lines during formation if visible
+        if (this.state.visibility['margin-lines'] && progress >= 0.5) {
+            this.drawMarginLines(ctx, data, progress, bounds, w, h, padding, gridSize);
+        }
+
         const testCount = Math.floor(data.test_points.length * (sampleCount / data.train_points.length));
         data.test_points.slice(0, testCount).forEach(pt => {
             const p = this.getPoint(pt);
@@ -404,7 +464,6 @@ const SVMAnimation = {
                 return Math.abs(p.x - sv.x) < 0.001 && Math.abs(p.y - sv.y) < 0.001;
             });
             if (!isVisible) return;
-
             ctx.strokeStyle = this.colors.support;
             ctx.lineWidth = 1.5;
             ctx.beginPath();
@@ -428,13 +487,50 @@ const SVMAnimation = {
         ctx.strokeRect(padding, padding, w - 2 * padding, h - 2 * padding);
     },
 
+    drawMarginLines(ctx, data, progress, bounds, w, h, padding, gridSize) {
+        const decisionValues = this.getDecisionValuesAtProgress(data, progress);
+        if (!decisionValues || decisionValues.length === 0) return;
+
+        const highRes = this.BOUNDARY_RESOLUTION;
+        const origSize = gridSize;
+
+        // Build flat arrays for +1 and -1 thresholds (same layout as boundary bitmap)
+        const flatPlus = new Int8Array(origSize * origSize);
+        const flatMinus = new Int8Array(origSize * origSize);
+
+        for (let j = 0; j < origSize; j++) {
+            for (let i = 0; i < origSize; i++) {
+                const idx = j * origSize + i;
+                if (idx < decisionValues.length) {
+                    flatPlus[idx] = decisionValues[idx] >= 1 ? 1 : 0;
+                    flatMinus[idx] = decisionValues[idx] >= -1 ? 1 : 0;
+                }
+            }
+        }
+
+        // Draw both margin contours with dashed lines
+        ctx.save();
+        ctx.setLineDash([8, 5]);
+        ctx.strokeStyle = 'rgba(0, 0, 0, 0.8)';
+        ctx.lineWidth = 1.8;
+        ctx.globalAlpha = Math.min(1, progress * 1.5);
+
+        const gridPlus = this.upsampleBoundary(flatPlus, origSize, highRes, bounds);
+        this.drawSmoothContour(ctx, gridPlus, highRes, w, h, padding, 1.0);
+
+        const gridMinus = this.upsampleBoundary(flatMinus, origSize, highRes, bounds);
+        this.drawSmoothContour(ctx, gridMinus, highRes, w, h, padding, 1.0);
+
+        ctx.restore();
+    },
+
+
     getBoundaryAtProgress(data, progress) {
         let rawBoundary = null;
 
         if (data.progressive_boundaries && data.progress_stages) {
             const stages = data.progress_stages;
             const boundaries = data.progressive_boundaries;
-
             for (let i = 0; i < stages.length; i++) {
                 if (progress <= stages[i]) {
                     if (boundaries[i]) { rawBoundary = boundaries[i]; break; }
@@ -463,7 +559,6 @@ const SVMAnimation = {
         if (data.progressive_decision_values && data.progress_stages) {
             const stages = data.progress_stages;
             const decisionValues = data.progressive_decision_values;
-
             for (let i = 0; i < stages.length; i++) {
                 if (progress <= stages[i]) {
                     if (decisionValues[i]) { rawValues = decisionValues[i]; break; }
@@ -497,7 +592,6 @@ const SVMAnimation = {
         const len = binString.length;
         const bytes = new Uint8Array(len);
         for (let i = 0; i < len; i++) bytes[i] = binString.charCodeAt(i);
-
         const result = new Int8Array(size);
         for (let i = 0; i < size; i++) {
             const byteIndex = Math.floor(i / 8);
@@ -515,7 +609,6 @@ const SVMAnimation = {
         const result = new Float32Array(len);
         const min = encodedObj.min;
         const rng = encodedObj.max - encodedObj.min;
-
         for (let i = 0; i < len; i++) {
             result[i] = min + (binString.charCodeAt(i) / 255) * rng;
         }
@@ -539,7 +632,6 @@ const SVMAnimation = {
             }
         }
         ctx.globalAlpha = 1;
-
         this.drawSmoothContour(ctx, grid, highRes, w, h, padding, 1.0);
     },
 
@@ -595,11 +687,15 @@ const SVMAnimation = {
         const cellW = (w - 2 * padding) / gridSize;
         const cellH = (h - 2 * padding) / gridSize;
 
-        ctx.strokeStyle = '#222';
-        ctx.lineWidth = 2.5 * progress;
+        // Only set stroke style if not already set by caller (for margin lines)
+        const isMarginCall = ctx.getLineDash && ctx.getLineDash().length > 0;
+        if (!isMarginCall) {
+            ctx.strokeStyle = '#222';
+            ctx.lineWidth = 2.5 * progress;
+        }
         ctx.lineCap = 'round';
         ctx.lineJoin = 'round';
-        ctx.globalAlpha = progress;
+        if (!isMarginCall) ctx.globalAlpha = progress;
 
         const segments = [];
 
@@ -636,24 +732,54 @@ const SVMAnimation = {
                     case 2: case 13: segments.push([bottom, right]); break;
                     case 3: case 12: segments.push([left, right]); break;
                     case 4: case 11: segments.push([top, right]); break;
-                    case 5: segments.push([left, top], [bottom, right]); break;
+                    case 5: segments.push([left, top], [bottom, right]); break; // Saddle point
                     case 6: case 9: segments.push([top, bottom]); break;
                     case 7: case 8: segments.push([left, top]); break;
-                    case 10: segments.push([top, right], [left, bottom]); break;
+                    case 10: segments.push([top, right], [left, bottom]); break; // Saddle point
                 }
             }
         }
 
-        segments.forEach(seg => {
-            if (seg.length === 2) {
-                ctx.beginPath();
-                ctx.moveTo(seg[0].x, seg[0].y);
-                ctx.lineTo(seg[1].x, seg[1].y);
-                ctx.stroke();
+        // Assemble segments into continuous polylines so line dash patterns work properly
+        const paths = [];
+        let remaining = [...segments];
+        const eps = 0.5;
+        const pointsMatch = (p1, p2) => Math.abs(p1.x - p2.x) < eps && Math.abs(p1.y - p2.y) < eps;
+
+        while (remaining.length > 0) {
+            const seg = remaining.pop();
+            const poly = [seg[0], seg[1]];
+            let changed = true;
+            while (changed) {
+                changed = false;
+                for (let i = 0; i < remaining.length; i++) {
+                    const cand = remaining[i];
+                    if (pointsMatch(cand[0], poly[poly.length - 1])) {
+                        poly.push(cand[1]); remaining.splice(i, 1); changed = true; break;
+                    } else if (pointsMatch(cand[1], poly[poly.length - 1])) {
+                        poly.push(cand[0]); remaining.splice(i, 1); changed = true; break;
+                    } else if (pointsMatch(cand[0], poly[0])) {
+                        poly.unshift(cand[1]); remaining.splice(i, 1); changed = true; break;
+                    } else if (pointsMatch(cand[1], poly[0])) {
+                        poly.unshift(cand[0]); remaining.splice(i, 1); changed = true; break;
+                    }
+                }
+            }
+            paths.push(poly);
+        }
+
+        ctx.beginPath();
+        paths.forEach(poly => {
+            if (poly.length > 0) {
+                ctx.moveTo(poly[0].x, poly[0].y);
+                for (let i = 1; i < poly.length; i++) {
+                    ctx.lineTo(poly[i].x, poly[i].y);
+                }
             }
         });
+        ctx.stroke();
 
-        ctx.globalAlpha = 1;
+        if (!isMarginCall) ctx.globalAlpha = 1;
     },
 
     getPoint(p) {
@@ -696,7 +822,6 @@ const SVMAnimation = {
     renderMoonsPlots() {
         const linearCanvas = document.getElementById('moonsLinearCanvas');
         const rbfCanvas = document.getElementById('moonsRbfCanvas');
-
         if (linearCanvas && this.state.moons.linearData) {
             this.drawMoonsPlot(linearCanvas, this.state.moons.linearData);
         }
@@ -717,7 +842,9 @@ const SVMAnimation = {
             const toCanvasX = (x) => padding + (x - bounds.x_min) * ((w - 2 * padding) / (bounds.x_max - bounds.x_min));
             const toCanvasY = (y) => h - padding - (y - bounds.y_min) * ((h - 2 * padding) / (bounds.y_max - bounds.y_min));
 
-            const allHidden = Object.values(this.state.visibility).every(v => v === false);
+            const coreVis = { ...this.state.visibility };
+            delete coreVis['margin-lines'];
+            const allHidden = Object.values(coreVis).every(v => v === false);
 
             if (allHidden) {
                 ctx.fillStyle = '#1a1a2e';
@@ -736,8 +863,14 @@ const SVMAnimation = {
                 return;
             }
 
+            const gridSize = data.grid_size || 50;
             const finalBoundary = this.getBoundaryAtProgress(data, 1.0);
-            this.drawAnimatedBoundary(ctx, finalBoundary, bounds, w, h, padding, data.grid_size || 50, 1.0);
+            this.drawAnimatedBoundary(ctx, finalBoundary, bounds, w, h, padding, gridSize, 1.0);
+
+            // Draw margin lines
+            if (this.state.visibility['margin-lines']) {
+                this.drawMarginLines(ctx, data, 1.0, bounds, w, h, padding, gridSize);
+            }
 
             if (this.state.visibility['test-correct'] || this.state.visibility['test-wrong']) {
                 data.test_points.forEach(pt => {
@@ -745,7 +878,6 @@ const SVMAnimation = {
                     const isCorrect = p.class === p.predicted;
                     if (isCorrect && !this.state.visibility['test-correct']) return;
                     if (!isCorrect && !this.state.visibility['test-wrong']) return;
-
                     ctx.fillStyle = isCorrect ? this.colors.testCorrect : this.colors.testWrong;
                     ctx.globalAlpha = 0.9;
                     ctx.beginPath();
@@ -770,7 +902,6 @@ const SVMAnimation = {
                 const p = this.getPoint(pt);
                 if (p.class === 0 && !this.state.visibility['train-class0']) return;
                 if (p.class === 1 && !this.state.visibility['train-class1']) return;
-
                 ctx.fillStyle = p.class === 0 ? this.colors.class0 : this.colors.class1;
                 ctx.beginPath();
                 ctx.arc(toCanvasX(p.x), toCanvasY(p.y), 4, 0, Math.PI * 2);
@@ -855,9 +986,7 @@ const SVMAnimation = {
         function animate() {
             const progress = stages[stageIndex];
             const sampleCount = Math.floor(data.train_points.length * progress);
-
             self.renderPartialHyperplane(sampleCount, progress);
-
             if (stageIndex < stages.length - 1) {
                 stageIndex++;
                 setTimeout(animate, delay);
@@ -878,7 +1007,9 @@ const SVMAnimation = {
 
         ctx.clearRect(0, 0, w, h);
 
-        const allHidden = Object.values(this.state.visibility).every(v => v === false);
+        const coreVis = { ...this.state.visibility };
+        delete coreVis['margin-lines'];
+        const allHidden = Object.values(coreVis).every(v => v === false);
         if (allHidden) {
             const bgGrad = ctx.createLinearGradient(0, 0, 0, h);
             bgGrad.addColorStop(0, '#1a1a2e');
@@ -953,6 +1084,7 @@ const SVMAnimation = {
         ctx.globalAlpha = 1;
 
         if (progress > 0.2) {
+            // Decision boundary (dv = 0)
             ctx.strokeStyle = '#88daeeff';
             ctx.lineWidth = 3 * progress;
             ctx.globalAlpha = progress;
@@ -975,6 +1107,37 @@ const SVMAnimation = {
                 }
             }
             ctx.globalAlpha = 1;
+
+            // Margin lines (dv = +1 and dv = -1) in 3D
+            if (this.state.visibility['margin-lines']) {
+                const marginThresholds = [1, -1];
+                ctx.save();
+                ctx.setLineDash([8, 5]);
+                ctx.strokeStyle = 'rgba(0, 0, 0, 0.7)';
+                ctx.lineWidth = 1.5 * progress;
+                ctx.globalAlpha = progress * 0.8;
+                marginThresholds.forEach(threshold => {
+                    for (let j = 0; j < gridSize - 1; j++) {
+                        for (let i = 0; i < gridSize - 1; i++) {
+                            const mv1 = decisionValues[j * gridSize + i] - threshold;
+                            const mv2 = decisionValues[j * gridSize + (i + 1)] - threshold;
+                            if ((mv1 > 0 && mv2 < 0) || (mv1 < 0 && mv2 > 0)) {
+                                const mx1n = ((i / (gridSize - 1)) * xRange + bounds.x_min - (bounds.x_min + xRange / 2)) / (xRange / 2);
+                                const mx2n = (((i + 1) / (gridSize - 1)) * xRange + bounds.x_min - (bounds.x_min + xRange / 2)) / (xRange / 2);
+                                const myn = ((j / (gridSize - 1)) * yRange + bounds.y_min - (bounds.y_min + yRange / 2)) / (yRange / 2);
+                                const mt = Math.abs(mv1) / (Math.abs(mv1) + Math.abs(mv2));
+                                const mxCross = mx1n + mt * (mx2n - mx1n);
+                                const mp = this.project3D({ x: mxCross, y: myn, z: 0 }, w, h);
+                                ctx.fillStyle = 'rgba(0, 0, 0, 0.6)';
+                                ctx.beginPath();
+                                ctx.arc(mp.x, mp.y, 1.5, 0, Math.PI * 2);
+                                ctx.fill();
+                            }
+                        }
+                    }
+                });
+                ctx.restore();
+            }
         }
 
         this.drawAxes3D(ctx, w, h);
@@ -994,17 +1157,24 @@ const SVMAnimation = {
             const z = ((decisionValues[Math.max(0, idx)] - minDV) / dvRange * 2 - 1) * heightScale;
             const projected = this.project3D({ x: nx, y: ny, z }, w, h);
 
-            ctx.fillStyle = 'rgba(0,0,0,0.3)';
+            const baseColor = p.class === 0 ? this.colors.class0 : this.colors.class1;
+            const r = 6;
+            // Shadow
+            ctx.fillStyle = 'rgba(0,0,0,0.25)';
             ctx.beginPath();
-            ctx.arc(projected.x + 2, projected.y + 2, 4, 0, Math.PI * 2);
+            ctx.arc(projected.x + 2, projected.y + 2, r, 0, Math.PI * 2);
             ctx.fill();
-
-            ctx.fillStyle = p.class === 0 ? this.colors.class0 : this.colors.class1;
+            // Sphere gradient
+            const grad = ctx.createRadialGradient(projected.x - r * 0.3, projected.y - r * 0.3, r * 0.1, projected.x, projected.y, r);
+            grad.addColorStop(0, '#ffffff');
+            grad.addColorStop(0.3, baseColor);
+            grad.addColorStop(1, this.darkenColor(baseColor, 0.4));
+            ctx.fillStyle = grad;
             ctx.beginPath();
-            ctx.arc(projected.x, projected.y, 4, 0, Math.PI * 2);
+            ctx.arc(projected.x, projected.y, r, 0, Math.PI * 2);
             ctx.fill();
-            ctx.strokeStyle = '#fff';
-            ctx.lineWidth = 1;
+            ctx.strokeStyle = 'rgba(255,255,255,0.5)';
+            ctx.lineWidth = 0.5;
             ctx.stroke();
         });
 
@@ -1024,10 +1194,16 @@ const SVMAnimation = {
                 const z = ((decisionValues[Math.max(0, idx)] - minDV) / dvRange * 2 - 1) * heightScale;
                 const projected = this.project3D({ x: nx, y: ny, z }, w, h);
 
-                ctx.globalAlpha = 0.7;
-                ctx.fillStyle = p.class === p.predicted ? this.colors.testCorrect : this.colors.testWrong;
+                const testColor = p.class === p.predicted ? this.colors.testCorrect : this.colors.testWrong;
+                const tr = 5;
+                const tGrad = ctx.createRadialGradient(projected.x - tr * 0.3, projected.y - tr * 0.3, tr * 0.1, projected.x, projected.y, tr);
+                tGrad.addColorStop(0, '#ffffff');
+                tGrad.addColorStop(0.35, testColor);
+                tGrad.addColorStop(1, this.darkenColor(testColor, 0.4));
+                ctx.globalAlpha = 0.85;
+                ctx.fillStyle = tGrad;
                 ctx.beginPath();
-                ctx.arc(projected.x, projected.y, 3, 0, Math.PI * 2);
+                ctx.arc(projected.x, projected.y, tr, 0, Math.PI * 2);
                 ctx.fill();
                 ctx.globalAlpha = 1;
             });
@@ -1123,6 +1299,15 @@ const SVMAnimation = {
         let z1 = y * sinX + z * cosX;
         let x2 = x * cosY + z1 * sinY;
         return { x: w / 2 + x2 * scale, y: h / 2 - y1 * scale };
+    },
+
+    darkenColor(hex, amount) {
+        // Darken a hex color by amount (0-1)
+        const num = parseInt(hex.replace('#', ''), 16);
+        const r = Math.max(0, Math.floor((num >> 16) * (1 - amount)));
+        const g = Math.max(0, Math.floor(((num >> 8) & 0x00FF) * (1 - amount)));
+        const b = Math.max(0, Math.floor((num & 0x0000FF) * (1 - amount)));
+        return `rgb(${r},${g},${b})`;
     },
 
     drawAxes3D(ctx, w, h) {

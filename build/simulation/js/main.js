@@ -1245,6 +1245,11 @@ function highlightCode(code) {
 }
 
 function downloadTrainingAsPDF() {
-    // Redirect to the PDF file for download
-    window.open('assets/EXP-8.pdf', '_blank');
+    // Trigger automatic download of the PDF file
+    const link = document.createElement('a');
+    link.href = 'Experiment-8_PDF.pdf';
+    link.download = 'Experiment-8_PDF.pdf';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
 }
