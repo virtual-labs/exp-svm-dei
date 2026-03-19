@@ -19,6 +19,74 @@
       "difficulty": "beginner"
     },
     {
+      "question": "In a 2D space, the SVM hyperplane is a:",
+      "answers": {
+        "a": "Plane",
+        "b": "Line",
+        "c": "Curve",
+        "d": "Point"
+      },
+      "explanations": {
+        "a": "Incorrect because a plane exists in 3D space.",
+        "b": "Correct because a hyperplane in 2D reduces to a straight line.",
+        "c": "Incorrect because the decision boundary is linear in transformed space.",
+        "d": "Incorrect because a point cannot separate classes."
+      },
+      "correctAnswer": "b",
+      "difficulty": "beginner"
+    },
+    {
+      "question": "What are the data points closest to the separating hyperplane called?",
+      "answers": {
+        "a": "Core points",
+        "b": "Support Vectors",
+        "c": "Cluster centres",
+        "d": "Outliers"
+      },
+      "explanations": {
+        "a": "Incorrect because this term is used in density-based clustering.",
+        "b": "Correct because these points define the margin and influence the boundary.",
+        "c": "Incorrect because cluster centres are used in K-means.",
+        "d": "Incorrect because outliers are not necessarily near the hyperplane."
+      },
+      "correctAnswer": "b",
+      "difficulty": "beginner"
+    },
+    {
+      "question": "The distance between the hyperplane and nearest data points is called:",
+      "answers": {
+        "a": "Bias",
+        "b": "Margin",
+        "c": "Loss",
+        "d": "Error"
+      },
+      "explanations": {
+        "a": "Incorrect because bias is a model parameter.",
+        "b": "Correct because margin defines class separation.",
+        "c": "Incorrect because loss measures prediction error.",
+        "d": "Incorrect because error refers to misclassification."
+      },
+      "correctAnswer": "b",
+      "difficulty": "beginner"
+    },
+    {
+      "question": "Which kernel is best suited for non-linear data?",
+      "answers": {
+        "a": "Linear",
+        "b": "Polynomial",
+        "c": "RBF",
+        "d": "Sigmoid"
+      },
+      "explanations": {
+        "a": "Incorrect because linear kernel captures only linear patterns.",
+        "b": "Incorrect because it may not model highly complex curves effectively.",
+        "c": "Correct because RBF models complex non-linear decision boundaries.",
+        "d": "Incorrect because sigmoid is less stable in many practical settings."
+      },
+      "correctAnswer": "c",
+      "difficulty": "beginner"
+    },
+    {
       "question": "Which concept ensures better generalization in SVM?",
       "answers": {
         "a": "Empirical Risk Minimization",
@@ -33,58 +101,7 @@
         "d": "Incorrect in this context because SRM is the core principle, while regularization is a supporting mechanism."
       },
       "correctAnswer": "c",
-      "difficulty": "intermediate"
-    },
-    {
-      "question": "What are the data points closest to the separating hyperplane called?",
-      "answers": {
-        "a": "Core points",
-        "b": "Support Vectors",
-        "c": "Cluster centres",
-        "d": "Outliers"
-      },
-      "explanations": {
-        "a": "Incorrect because this term is used in density-based clustering, not SVM.",
-        "b": "Correct because these points define the margin and influence the position of the hyperplane.",
-        "c": "Incorrect because cluster centres are used in clustering algorithms like K-means.",
-        "d": "Incorrect because outliers may be far from the hyperplane."
-      },
-      "correctAnswer": "b",
-      "difficulty": "beginner"
-    },
-    {
-      "question": "In a 2D space, the SVM hyperplane is a:",
-      "answers": {
-        "a": "Plane",
-        "b": "Line",
-        "c": "Curve",
-        "d": "Point"
-      },
-      "explanations": {
-        "a": "Incorrect because a plane exists in 3D space.",
-        "b": "Correct because a hyperplane in 2D reduces to a straight line.",
-        "c": "Incorrect because the decision boundary is linear in the transformed feature space.",
-        "d": "Incorrect because a point cannot separate data."
-      },
-      "correctAnswer": "b",
-      "difficulty": "beginner"
-    },
-    {
-      "question": "Which kernel is best suited for non-linear data?",
-      "answers": {
-        "a": "Linear",
-        "b": "Polynomial",
-        "c": "RBF",
-        "d": "Sigmoid"
-      },
-      "explanations": {
-        "a": "Incorrect because it can only model linear relationships.",
-        "b": "Incorrect because it may fail for highly complex non-linear patterns.",
-        "c": "Correct because the Radial Basis Function kernel can model complex, non-linear decision boundaries.",
-        "d": "Incorrect because it is less stable and less commonly used in practice."
-      },
-      "correctAnswer": "c",
-      "difficulty": "intermediate"
+      "difficulty": "advanced"
     },
     {
       "question": "The objective of SVM is to:",
@@ -101,7 +118,7 @@
         "d": "Incorrect because SVM is not primarily a dimensionality reduction algorithm."
       },
       "correctAnswer": "b",
-      "difficulty": "beginner"
+      "difficulty": "advanced"
     },
     {
       "question": "What does the kernel trick allow?",
@@ -118,7 +135,7 @@
         "d": "Incorrect because normalization is a preprocessing step."
       },
       "correctAnswer": "c",
-      "difficulty": "intermediate"
+      "difficulty": "advanced"
     },
     {
       "question": "Which library is commonly used for SVM implementation in Python?",
@@ -135,24 +152,7 @@
         "d": "Incorrect because it is primarily used for deep learning."
       },
       "correctAnswer": "c",
-      "difficulty": "beginner"
-    },
-    {
-      "question": "The distance between the hyperplane and nearest data points is called:",
-      "answers": {
-        "a": "Bias",
-        "b": "Margin",
-        "c": "Loss",
-        "d": "Error"
-      },
-      "explanations": {
-        "a": "Incorrect because bias is a model parameter.",
-        "b": "Correct because margin defines the separation between classes.",
-        "c": "Incorrect because loss measures prediction error.",
-        "d": "Incorrect because error refers to misclassification."
-      },
-      "correctAnswer": "b",
-      "difficulty": "beginner"
+      "difficulty": "advanced"
     },
     {
       "question": "SVMs are particularly effective for:",
@@ -169,7 +169,7 @@
         "d": "Incorrect because SVM is not an unsupervised clustering algorithm."
       },
       "correctAnswer": "b",
-      "difficulty": "intermediate"
+      "difficulty": "advanced"
     }
   ]
 }

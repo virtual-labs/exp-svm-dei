@@ -1,0 +1,22 @@
+
+C:\Users\3337r\OneDrive\Desktop\new_vlab\exp-svm-dei\experiment\simulation\js\svm_animation.js
+    4:7   warning  'SVMAnimation' is assigned a value but never used  no-unused-vars
+  618:74  warning  'progress' is defined but never used               no-unused-vars
+
+C:\Users\3337r\OneDrive\Desktop\new_vlab\exp-svm-dei\experiment\simulation\js\svm_data.js
+  5:7  warning  'SVM_PLOT_DATA' is assigned a value but never used  no-unused-vars
+
+C:\Users\3337r\OneDrive\Desktop\new_vlab\exp-svm-dei\experiment\simulation\script.js
+  463:15  warning  'val' is assigned a value but never used   no-unused-vars
+  573:79  warning  'progress' is defined but never used       no-unused-vars
+  618:42  warning  'bounds' is not defined                    no-undef
+  618:59  warning  'bounds' is not defined                    no-undef
+  618:74  warning  'bounds' is not defined                    no-undef
+  619:42  warning  'bounds' is not defined                    no-undef
+  619:59  warning  'bounds' is not defined                    no-undef
+  619:74  warning  'bounds' is not defined                    no-undef
+  688:19  warning  'midX' is assigned a value but never used  no-unused-vars
+  689:19  warning  'midY' is assigned a value but never used  no-unused-vars
+
+✖ 13 problems (0 errors, 13 warnings)
+

@@ -1,103 +1,248 @@
-Support Vector Machines (SVMs) were formally established as a statistical learning framework grounded in the principle of Structural Risk Minimization (SRM), by Cortes and Vapnik (1995). The fundamental objective of SVM resides in determining an optimal decision boundary that maximizes the separation margin between different classes in a given feature space.
+<style>
+.formula-block {
+    text-align: center;
+    margin: 18px 0;
+}
 
-The goal of the Support Vector Machine is to find the hyperplane that maximizes the margin between two classes. This principle ensures improved generalization performance by minimizing the upper bound on the generalization error rather than merely minimizing empirical risk.
+.formula-text {
+    display: inline-block;
+    font-family: "Cambria Math", "Times New Roman", "Georgia", serif;
+    font-size: 1.15em;
+    line-height: 1.45;
+}
 
-#### 1. Hyperplane
+.figure-block {
+    text-align: center;
+    margin: 18px 0;
+}
 
-A hyperplane is a flat affine subspace of one dimension less than its ambient space. In an n-dimensional space, a hyperplane has (n-1) dimensions. For a linearly separable dataset, the SVM seeks a separating hyperplane defined by:
+.figure-block img {
+    max-height: 320px;
+    width: auto;
+}
 
-<div style="text-align: center; margin: 15px 0;">
-<span style="display: inline-block; padding: 10px 20px; border: 1px solid #ccc; background-color: #f9f9f9; font-style: italic;">w<sup>T</sup> x + b = 0</span>
+.figure-caption {
+    color: #64748b;
+    font-size: 0.92rem;
+    margin-top: 8px;
+    font-style: italic;
+}
+</style>
+
+### Introduction
+
+Support Vector Machines (SVMs) are supervised machine learning algorithms used for classification and regression tasks. They were introduced by Cortes and Vapnik (1995) within the framework of Statistical Learning Theory and Structural Risk Minimization (SRM).
+
+The main objective of SVM is to find a decision boundary that separates classes with the maximum possible margin. Instead of minimizing only training error, SVM balances training fit and model complexity to improve generalization on unseen data.
+
+### 1. Hyperplane
+
+A hyperplane divides the feature space into two regions corresponding to different classes. In a 2D feature space, the hyperplane is a line; in 3D, it is a plane; in higher dimensions, it is referred to as a hyperplane.
+
+For a linearly separable dataset, SVM seeks a separating hyperplane:
+
+<div class="formula-block">
+    <span class="formula-text">
+        <i>w</i><sup>T</sup><i>x</i> + <i>b</i> = 0
+    </span>
 </div>
 
-where **w** is the weight vector which is normal to the hyperplane and **b** is the bias term.
+where w is the weight vector (normal to the hyperplane) and b is the bias term.
 
-> **Note:** An optimal hyperplane is the one that maximizes the margin between the classes.
+An optimal hyperplane is the one that maximizes the margin between the classes.
 
-#### 2. Support Vectors
-
-A margin is defined as the perpendicular distance between the hyperplane and the nearest data points from each class. These points are known as **support vectors**.
-
-#### 3. Margin Maximization
-
-The margin maximization problem can be formulated as:
-
-<div style="text-align: center; margin: 15px 0;">
-<span style="display: inline-block; padding: 10px 20px; border: 1px solid #ccc; background-color: #f9f9f9; font-style: italic;">min<sub>w,b</sub> ½||w||²</span>
+<div class="figure-block">
+    <img src="images/fig-1_svm.png" alt="Linear SVM Maximum Margin">
+    <p class="figure-caption">Figure 1: Linear Support Vector Machine (SVM): Maximum Margin Classifier.</p>
 </div>
 
-with constraint:
+### 2. Support Vectors
 
-<div style="text-align: center; margin: 15px 0;">
-<span style="display: inline-block; padding: 10px 20px; border: 1px solid #ccc; background-color: #f9f9f9; font-style: italic;">y<sub>i</sub>(w·x<sub>i</sub> + b) ≥ 1</span>
+Support vectors are the training samples closest to the separating hyperplane. These points determine the position and orientation of the boundary. Points farther from the boundary have little or no direct effect on the final hyperplane.
+
+<div class="figure-block">
+    <img src="images/fig-2_svm.png" alt="SVM Support Vectors">
+    <p class="figure-caption">Figure 2: SVM Classification with Maximum Margin and Support Vectors.</p>
 </div>
 
-for all training samples (x<sub>i</sub>, y<sub>i</sub>). This formulation ensures that the separating hyperplane lies as far as possible from the closest data points, thereby enhancing the classifier's ability to generalize to unseen data.
+### 3. Margin Maximization
 
-#### 4. Kernels
+SVM maximizes the geometric margin by minimizing the norm of the weight vector under classification constraints:
 
-SVM employs the **kernel trick** to handle decision boundaries. The input data is implicitly mapped to a higher-dimensional feature space where separation becomes feasible. This transformation is performed through kernel functions without explicitly computing the coordinates in the high-dimensional space.
-
-**Common Kernel functions include:**
-
-**Linear Kernel:** The linear kernel is suitable when the data is approximately linearly separable.
-
-<div style="text-align: center; margin: 15px 0;">
-<span style="display: inline-block; padding: 10px 20px; border: 1px solid #ccc; background-color: #f9f9f9; font-style: italic;">K(x<sub>i</sub>, x<sub>j</sub>) = x<sub>i</sub>·x<sub>j</sub></span>
+<div class="formula-block">
+    <span class="formula-text">
+        min<sub>w,b</sub> (1/2)||<i>w</i>||<sup>2</sup>
+    </span>
 </div>
 
-**Radial Basis Function (RBF) Kernel:** The RBF kernel maps data into an infinite-dimensional feature space and is highly effective for capturing complex, non-linear relationships.
+subject to
 
-<div style="text-align: center; margin: 15px 0;">
-<span style="display: inline-block; padding: 10px 20px; border: 1px solid #ccc; background-color: #f9f9f9; font-style: italic;">K(x<sub>i</sub>, x<sub>j</sub>) = e<sup>(-|x<sub>i</sub>-x<sub>j</sub>|²/2σ²)</sup></span>
+<div class="formula-block">
+    <span class="formula-text">
+        <i>y</i><sub>i</sub>(<i>w</i> · <i>x</i><sub>i</sub> + <i>b</i>) >= 1, for all <i>i</i>
+    </span>
 </div>
 
-The variance (σ²) controls the influence of individual training samples. Higher values lead to tighter decision boundaries.
+This gives a robust classifier with better resistance to noise and improved generalization.
 
-The RBF kernel is particularly effective and is commonly used for modelling complex, non-linear relationships due to its radially localised response characteristics.
-
-In the figure given below, Linear Kernel (left) is unable to separate a single 'Class 0' from 'Class 1' sample which RBF Kernel (right) is able to separate well. Mainly due to, RBF can get more meaningful support vectors (circled points) to classify sample points with help of better hyperplane formation.
-
-<div style="text-align: center; margin: 15px 0;">
-<img src="images/svm1.png" alt="Linear Kernel" style="max-height: 300px; width: auto; margin-right: 10px;">
-<img src="images/svm2.png" alt="RBF Kernel" style="max-height: 300px; width: auto;">
+<div class="figure-block">
+    <img src="images/fig-3_svm.png" alt="Optimal Hyperplane and Margin">
+    <p class="figure-caption">Figure 3: Optimal Hyperplane and Maximum Margin in Support Vector Machines.</p>
 </div>
 
-#### 5. Merits of Support Vector Machines
+### 4. Kernel Trick
 
-- **Good generalization performance:** SVMs focus on maximizing the margin between classes, which helps the model perform well on unseen data and reduces overfitting, especially in high-dimensional datasets.
-- **Works well for both linear and non-linear data:** By using different kernel functions such as Linear and RBF, SVMs can handle simple linearly separable data as well as complex non-linear patterns effectively.
-- **Uses only important data points:** The model depends mainly on support vectors, which are the most critical data points near the decision boundary. This makes the classifier efficient and robust.
+Many real datasets are not linearly separable in the original feature space. The kernel trick addresses this by implicitly mapping data into a higher-dimensional feature space where a linear separator can be found.
 
-#### 6. Demerits of Support Vector Machines
+Instead of computing explicit transformed coordinates, SVM uses a kernel function to compute inner products directly in transformed space:
 
-- **High training time for large datasets:** SVM training can be slow and computationally expensive when the dataset is very large, particularly when non-linear kernels are used.
-- **Sensitive to parameter selection:** The performance of SVM strongly depends on choosing the right kernel and hyper-parameters. Incorrect values can lead to poor classification results.
-- **Harder to interpret results:** Unlike simpler models such as Linear Regression or Decision Trees, especially SVMs with non-linear kernels do not provide clear insights into how individual features might affect predictions.
+<div class="formula-block">
+    <span class="formula-text">
+        <i>K</i>(<i>x</i><sub>i</sub>, <i>x</i><sub>j</sub>) = <i>&phi;</i>(<i>x</i><sub>i</sub>)<sup>T</sup><i>&phi;</i>(<i>x</i><sub>j</sub>)
+    </span>
+</div>
 
-#### 7. Algorithm
+This enables efficient non-linear classification.
 
-- **Step 1:** Given training data with two classes (+1 and -1)
-- **Step 2:** Find hyperplane: `w·x + b = 0`
-    - w = weight vector (perpendicular to hyperplane)
-    - b = bias term
-- **Step 3:** Define margin constraints:
-    - For class +1 points: `w·xᵢ + b ≥ +1`
-    - For class -1 points: `w·xᵢ + b ≤ -1`
-    - Combined: `yᵢ(w·xᵢ + b) ≥ 1`
-- **Step 4:** Margin width = `2/||w||`
-- **Step 5:** Optimization problem:
-    - Minimize: `(1/2)||w||²`
-    - Subject to: `yᵢ(w·xᵢ + b) ≥ 1` for all i
-- **Step 6:** Solve using Lagrange multipliers:
-    - Convert to dual form
-    - Find αᵢ values for each training point
-    - Support vectors are points where αᵢ > 0
-- **Step 7:** For non-linear data, apply **Kernel Trick**:
-    - **RBF Kernel:** `K(x,x') = exp(-γ||x-x'||²)`
-    - **Polynomial Kernel:** `K(x,x') = (x·x' + c)ᵈ`
-    - Maps data to higher dimension where linear separation is possible
-- **Step 8:** For prediction:
-    - Calculate: `f(x) = Σ(αᵢ × yᵢ × K(xᵢ,x)) + b`
-    - If `f(x) ≥ 0` then it belongs to Class +1, otherwise, it belongs to class -1
+<div class="figure-block">
+    <img src="images/fig-4_svm.png" alt="Kernel Trick Mapping">
+    <p class="figure-caption">Figure 4: Kernel Trick: Mapping Data to Higher-Dimensional Space in SVM.</p>
+</div>
+
+#### Common Kernel Functions
+
+**Linear Kernel** (suitable for approximately linearly separable data):
+
+<div class="formula-block">
+    <span class="formula-text">
+        <i>K</i>(<i>x</i><sub>i</sub>, <i>x</i><sub>j</sub>) = <i>x</i><sub>i</sub> · <i>x</i><sub>j</sub>
+    </span>
+</div>
+
+**RBF Kernel** (effective for complex non-linear patterns):
+
+<div class="formula-block">
+    <span class="formula-text">
+        <i>K</i>(<i>x</i><sub>i</sub>, <i>x</i><sub>j</sub>) = <i>e</i><sup>-||<i>x</i><sub>i</sub> - <i>x</i><sub>j</sub>||<sup>2</sup> / (2<i>&sigma;</i><sup>2</sup>)</sup>
+    </span>
+</div>
+
+RBF has localized response and can create flexible non-linear boundaries. The variance <i>&sigma;</i><sup>2</sup> controls how far the influence of each training point extends.
+
+<div class="figure-block">
+    <img src="images/fig-5_svm.png" alt="Linear vs RBF Kernel">
+    <p class="figure-caption">Figure 5: Comparison of Linear and RBF Kernels in SVM.</p>
+</div>
+
+### 5. L1 Regularization in SVM
+
+Regularization in SVM is controlled by parameter C, which balances margin maximization against training misclassification.
+
+- Higher C: lower tolerance for misclassification, narrower effective margin, risk of overfitting.
+- Lower C: more tolerance for misclassification, wider margin, better robustness.
+
+L1 regularization encourages sparse weight vectors by penalizing absolute coefficient magnitude. This can reduce the influence of weak features and improve interpretability in linear SVM formulations.
+
+### 6. Algorithm
+
+**Step 1:** Given training data with labels +1 and -1.
+
+**Step 2:** Define hyperplane:
+
+<div class="formula-block">
+    <span class="formula-text">
+        <i>w</i> · <i>x</i> + <i>b</i> = 0
+    </span>
+</div>
+
+**Step 3:** Define margin constraints:
+
+<div class="formula-block">
+    <span class="formula-text">
+        <i>w</i> · <i>x</i><sub>i</sub> + <i>b</i> >= +1, &nbsp; if <i>y</i><sub>i</sub> = +1
+    </span>
+</div>
+
+<div class="formula-block">
+    <span class="formula-text">
+        <i>w</i> · <i>x</i><sub>i</sub> + <i>b</i> <= -1, &nbsp; if <i>y</i><sub>i</sub> = -1
+    </span>
+</div>
+
+<div class="formula-block">
+    <span class="formula-text">
+        <i>y</i><sub>i</sub>(<i>w</i> · <i>x</i><sub>i</sub> + <i>b</i>) >= 1
+    </span>
+</div>
+
+**Step 4:** Margin width:
+
+<div class="formula-block">
+    <span class="formula-text">
+        Margin = 2 / ||<i>w</i>||
+    </span>
+</div>
+
+**Step 5:** Solve optimization:
+
+<div class="formula-block">
+    <span class="formula-text">
+        min<sub><i>w</i>,<i>b</i></sub> (1/2)||<i>w</i>||<sup>2</sup>
+    </span>
+</div>
+
+<div class="formula-block">
+    <span class="formula-text">
+        subject to &nbsp; <i>y</i><sub>i</sub>(<i>w</i> · <i>x</i><sub>i</sub> + <i>b</i>) >= 1, &nbsp; for all <i>i</i>
+    </span>
+</div>
+
+**Step 6:** Use Lagrange multipliers and dual optimization. Support vectors are points with non-zero multipliers <i>&alpha;</i><sub>i</sub>.
+
+**Step 7:** For non-linear data, use kernels such as:
+- Linear Kernel:
+
+<div class="formula-block">
+    <span class="formula-text">
+        <i>K</i>(<i>x</i>, <i>x</i>') = <i>x</i> · <i>x</i>'
+    </span>
+</div>
+
+- RBF Kernel:
+
+<div class="formula-block">
+    <span class="formula-text">
+        <i>K</i>(<i>x</i>, <i>x</i>') = <i>e</i><sup>-||<i>x</i>-<i>x</i>'||<sup>2</sup> / (2<i>&sigma;</i><sup>2</sup>)</sup>
+    </span>
+</div>
+
+- Polynomial Kernel:
+
+<div class="formula-block">
+    <span class="formula-text">
+        <i>K</i>(<i>x</i>, <i>x</i>') = (<i>x</i> · <i>x</i>' + <i>c</i>)<sup>d</sup>
+    </span>
+</div>
+
+**Step 8:** Prediction function:
+
+<div class="formula-block">
+    <span class="formula-text">
+        <i>f</i>(<i>x</i>) = &sum;<sub><i>i</i>=1</sub><sup><i>m</i></sup> <i>&alpha;</i><sub>i</sub><i>y</i><sub>i</sub><i>K</i>(<i>x</i><sub>i</sub>, <i>x</i>) + <i>b</i>
+    </span>
+</div>
+
+If <i>f</i>(<i>x</i>) >= 0, predict class +1; otherwise class -1.
+
+### 7. Merits of Support Vector Machines
+
+- Good generalization due to margin maximization.
+- Effective for both linear and non-linear classification.
+- Uses only support vectors to define the boundary, making it robust.
+
+### 8. Demerits of Support Vector Machines
+
+- Computationally expensive for very large datasets.
+- Sensitive to kernel and hyper-parameter selection.
+- Less interpretable than simpler linear/probabilistic models for non-linear kernels.
 

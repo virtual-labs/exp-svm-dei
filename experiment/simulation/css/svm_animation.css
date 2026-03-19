@@ -50,8 +50,13 @@
 }
 
 @keyframes svm-spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
 }
 
 #svm-animation-container .loading-content h2 {
@@ -271,10 +276,21 @@
     border-radius: 50%;
 }
 
-#svm-animation-container .dot.class0 { background: #1f77b4; }
-#svm-animation-container .dot.class1 { background: #ff7f0e; }
-#svm-animation-container .dot.correct { background: #4caf50; }
-#svm-animation-container .dot.wrong { background: #f44336; }
+#svm-animation-container .dot.class0 {
+    background: #1f77b4;
+}
+
+#svm-animation-container .dot.class1 {
+    background: #ff7f0e;
+}
+
+#svm-animation-container .dot.correct {
+    background: #4caf50;
+}
+
+#svm-animation-container .dot.wrong {
+    background: #f44336;
+}
 
 #svm-animation-container .ring {
     width: 10px;
@@ -316,7 +332,8 @@
 }
 
 #svm-animation-container .metric-label {
-    color: #546e7a;
+    color: #000;
+    font-weight: bold;
     font-family: 'Consolas', monospace;
 }
 
@@ -586,6 +603,118 @@
     box-shadow: 0 4px 12px rgba(25, 118, 210, 0.4);
 }
 
+/* Dataset Toggle */
+#svm-animation-container .dataset-toggle {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+    margin-top: 12px;
+}
+
+#svm-animation-container .dataset-toggle-btn {
+    padding: 8px 22px;
+    background: rgba(255, 255, 255, 0.15);
+    color: white;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 600;
+    transition: all 0.25s ease;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+#svm-animation-container .dataset-toggle-btn:hover {
+    background: rgba(255, 255, 255, 0.25);
+    border-color: rgba(255, 255, 255, 0.6);
+}
+
+#svm-animation-container .dataset-toggle-btn.active {
+    background: rgba(255, 255, 255, 0.95);
+    color: #1565c0;
+    border-color: white;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.2);
+}
+
+/* Slider Styles */
+#svm-animation-container .slider-container {
+    position: relative;
+    padding-bottom: 18px;
+}
+
+#svm-animation-container .config-slider {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 100%;
+    height: 6px;
+    background: linear-gradient(90deg, #bbdefb, #1976d2);
+    border-radius: 3px;
+    outline: none;
+    cursor: pointer;
+    transition: opacity 0.2s;
+}
+
+#svm-animation-container .config-slider:hover {
+    opacity: 0.9;
+}
+
+#svm-animation-container .config-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #1976d2, #42a5f5);
+    border: 3px solid white;
+    box-shadow: 0 2px 8px rgba(25, 118, 210, 0.4);
+    cursor: pointer;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+#svm-animation-container .config-slider::-webkit-slider-thumb:hover {
+    transform: scale(1.15);
+    box-shadow: 0 3px 12px rgba(25, 118, 210, 0.6);
+}
+
+#svm-animation-container .config-slider::-moz-range-thumb {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #1976d2, #42a5f5);
+    border: 3px solid white;
+    box-shadow: 0 2px 8px rgba(25, 118, 210, 0.4);
+    cursor: pointer;
+}
+
+#svm-animation-container .slider-ticks {
+    display: flex;
+    justify-content: space-between;
+    padding: 4px 2px 0;
+    font-size: 10px;
+    color: #78909c;
+    font-family: 'Consolas', monospace;
+}
+
+#svm-animation-container .val-display {
+    float: right;
+    font-weight: 700;
+    color: #1976d2;
+    font-family: 'Consolas', monospace;
+    font-size: 13px;
+    background: #e3f2fd;
+    padding: 1px 8px;
+    border-radius: 4px;
+}
+
+/* Margin Lines Icon */
+#svm-animation-container .margin-icon {
+    display: inline-block;
+    width: 16px;
+    height: 2px;
+    border-top: 2px dashed #000;
+    vertical-align: middle;
+}
+
 /* Responsive */
 @media (max-width: 1200px) {
     #svm-animation-container .layout {
@@ -599,6 +728,7 @@
 }
 
 @media (max-width: 768px) {
+
     #svm-animation-container .dual-plots,
     #svm-animation-container .dual-metrics {
         grid-template-columns: 1fr;
