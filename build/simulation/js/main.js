@@ -965,7 +965,7 @@ function renderSidebar() {
         const status = EXPERIMENT_STATE.stepsStatus[index];
         const btn = document.createElement('button');
         btn.classList.add('step-btn');
-        
+
         let label = `${index + 1}. ${step.title}`;
         if (status.completed) label = `✓ ${step.title}`;
         btn.innerText = label;
@@ -973,7 +973,7 @@ function renderSidebar() {
         if (status.unlocked) {
             if (status.completed) btn.classList.add('completed');
             else if (status.partial) btn.classList.add('in-progress');
-            
+
             btn.disabled = false;
             btn.style.cursor = 'pointer';
             if (index === EXPERIMENT_STATE.stepIndex) btn.classList.add('active');
@@ -1062,13 +1062,13 @@ function restartExperiment() {
 function updateUI() {
     const step = STEPS[EXPERIMENT_STATE.stepIndex];
     if (!step || !step.blocks || step.blocks.length === 0) return;
-    
+
     const block = step.blocks[EXPERIMENT_STATE.subStepIndex];
     if (!block) return;
 
     let headerComment = "";
     let displayCode = block.code || "";
-    
+
     if (block && block.comment) {
         headerComment = block.comment;
     } else if (block && block.code) {
@@ -1096,7 +1096,7 @@ function updateUI() {
     bottomPane.style.flexDirection = 'column';
     bottomPane.style.justifyContent = 'flex-start';
     bottomPane.style.alignItems = 'stretch';
-    
+
     if (outputDisplay) {
         outputDisplay.innerHTML = '<div class="placeholder-text">Click the Run button to execute...</div>';
     }
@@ -1130,14 +1130,14 @@ function runStep() {
         const hasNextBlock = EXPERIMENT_STATE.subStepIndex < step.blocks.length - 1;
 
         if (hasNextBlock) {
-             setTimeout(() => {
+            setTimeout(() => {
                 runBtn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>';
                 runBtn.classList.remove('completed');
                 runBtn.classList.add('arrow-mode');
                 runBtn.style.backgroundColor = '#5FA8E4';
                 runBtn.disabled = false;
                 runBtn.onclick = nextSubStep;
-             }, 500);
+            }, 500);
         } else {
             EXPERIMENT_STATE.stepsStatus[EXPERIMENT_STATE.stepIndex].completed = true;
             renderSidebar();
@@ -1145,30 +1145,30 @@ function runStep() {
             if (EXPERIMENT_STATE.stepIndex < STEPS.length - 1) {
                 EXPERIMENT_STATE.stepsStatus[EXPERIMENT_STATE.stepIndex + 1].unlocked = true;
                 renderSidebar();
-                
-                 setTimeout(() => {
+
+                setTimeout(() => {
                     runBtn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>';
                     runBtn.classList.remove('completed');
                     runBtn.classList.add('arrow-mode');
                     runBtn.style.backgroundColor = '#5FA8E4';
                     runBtn.disabled = false;
-                    
+
                     // Show dataset selector when moving from Data Preprocessing (Step 3, index 3) to Model Training (Step 4, index 4)
                     if (EXPERIMENT_STATE.stepIndex === 3) {
                         runBtn.onclick = showDatasetSelector;
                     } else {
-                        runBtn.onclick = function() { loadStep(EXPERIMENT_STATE.stepIndex + 1); };
+                        runBtn.onclick = function () { loadStep(EXPERIMENT_STATE.stepIndex + 1); };
                     }
-                 }, 500);
+                }, 500);
             } else {
-                 setTimeout(() => {
+                setTimeout(() => {
                     runBtn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>';
                     runBtn.classList.remove('completed');
                     runBtn.classList.add('arrow-mode');
                     runBtn.style.backgroundColor = '#5FA8E4';
                     runBtn.disabled = false;
                     runBtn.onclick = showCompletionMessage;
-                 }, 500);
+                }, 500);
             }
         }
     }, 800);
@@ -1225,7 +1225,7 @@ function showCompletionMessage() {
             " onmouseover="this.style.background='#334155'; this.style.transform='translateY(-2px)'" 
                onmouseout="this.style.background='#1e293b'; this.style.transform='translateY(0)'">
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
-                Enter Interactive Animation
+                Launch Interactive Simulation
             </button>
         </div>
     `;
@@ -1235,13 +1235,13 @@ function showCompletionMessage() {
 }
 
 function highlightCode(code) {
-  if (!code) return '';
-  return code
-    .replace(/\bimport\b/g, '<span class="kw">import</span>')
-    .replace(/\bfrom\b/g, '<span class="kw">from</span>')
-    .replace(/\bas\b/g, '<span class="kw">as</span>')
-    .replace(/\bprint\b/g, '<span class="func">print</span>')
-    .replace(/#.*$/gm, match => `<span class="comment">${match}</span>`);
+    if (!code) return '';
+    return code
+        .replace(/\bimport\b/g, '<span class="kw">import</span>')
+        .replace(/\bfrom\b/g, '<span class="kw">from</span>')
+        .replace(/\bas\b/g, '<span class="kw">as</span>')
+        .replace(/\bprint\b/g, '<span class="func">print</span>')
+        .replace(/#.*$/gm, match => `<span class="comment">${match}</span>`);
 }
 
 function downloadTrainingAsPDF() {
