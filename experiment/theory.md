@@ -159,7 +159,7 @@ performance and better generalization.
 ### 4. Margin Maximization
 
 This optimization problem attempts to minimize the magnitude of the weight vector while satisfying 
-the classification constraints. By minimizing || 𝑤 ||2, the margin between the two classes becomes 
+the classification constraints. By minimizing || 𝑤 ||<sup>2</sup>, the margin between the two classes becomes 
 larger. A larger margin leads to a classifier that is less sensitive to noise and better able to generalize 
 to unseen data. 
 
