@@ -125,11 +125,11 @@ Note - An optimal hyperplane is the one that maximizes the margin between the cl
     <p class="figure-caption">Figure 1: Linear Support Vector Machine (SVM): Maximum Margin Classifier.</p>
 </div>
 As shown in Figure 1, the Support Vector Machine (SVM) separates two classes of data points in a 
-two-dimensional feature space defined by 𝑥1 and 𝑥2. The green points represent Class 1, while the 
-orange points represent Class 2. The solid line 𝑤 ⋅ 𝑥 − 𝑏 = 0 represents the optimal 
-separating hyperplane that divides the two classes. The dashed lines 𝑤 ⋅ 𝑥 − 𝑏 = 1 and 𝑤 ⋅ 𝑥 −
-𝑏 = −1 denote the margin boundaries, and the distance between them is referred to as the 
-maximum margin. The vector 𝑤 is perpendicular to the hyperplane and determines its orientation. 
+two-dimensional feature space defined by <i>x</i><sub>1</sub> and <i>x</i><sub>2</sub>. The green points represent Class 1, while the 
+orange points represent Class 2. The solid line <i>w</i> &middot; <i>x</i> &minus; <i>b</i> = 0 represents the optimal 
+separating hyperplane that divides the two classes. The dashed lines <i>w</i> &middot; <i>x</i> &minus; <i>b</i> = 1 and <i>w</i> &middot; <i>x</i> &minus;
+<i>b</i> = &minus;1 denote the margin boundaries, and the distance between them is referred to as the 
+maximum margin. The vector <i>w</i> is perpendicular to the hyperplane and determines its orientation. 
 
 ### 3. Support Vectors
 
@@ -146,7 +146,7 @@ algorithm is called a Support Vector Machine.
 </div>
 
 As shown in Figure 2, the Support Vector Machine (SVM) separates two classes of data points in a 
-two-dimensional feature space represented by 𝑥1 and 𝑥2. The orange circular points represent 
+two-dimensional feature space represented by <i>x</i><sub>1</sub> and <i>x</i><sub>2</sub>. The orange circular points represent 
 the first class, while the green square points represent the second class. The central dashed line 
 represents the decision boundary that divides the two classes, and the two parallel dashed lines on 
 either side denote the hyperplanes that define the margin. 
@@ -179,7 +179,7 @@ with constraint,
     <span class="formula-text"><i>y</i><sub>i</sub>(<i>w</i> · <i>x</i><sub>i</sub> + <i>b</i>) ≥ 1</span>
 </div>
 
-for all training samples (𝑥𝑖, 𝑦𝑖) This formulation ensures that the separating hyperplane lies as far 
+for all training samples (<i>x<sub>i</sub></i>, <i>y<sub>i</sub></i>). This formulation ensures that the separating hyperplane lies as far 
 as possible from the closest data points, thereby enhancing the classifier’s ability to generalize to 
 unseen data.
 
@@ -189,7 +189,7 @@ unseen data.
 </div>
 
 As shown Figure 3, the Support Vector Machine (SVM) separates two classes of data points in a 
-two-dimensional feature space defined by the axes 𝑥1 and 𝑥2. The purple circular points 
+two-dimensional feature space defined by the axes <i>x</i><sub>1</sub> and <i>x</i><sub>2</sub>. The purple circular points 
 represent one class, while the orange triangular points represent the other. The solid slanted line 
 labelled “Optimal hyperplane” acts as the decision boundary that divides the two classes. 
 
@@ -319,7 +319,11 @@ b = bias term
 
 <div class="formula-block formula-block--left">
     <span class="formula-text">
-        Margin width = 2 / ||<i>w</i>||
+        Margin width = 
+        <div style="display: inline-block; vertical-align: middle; text-align: center; margin: 0 5px;">
+            <div style="border-bottom: 1.2px solid black; padding: 0 5px;">2</div>
+            <div style="padding-top: 2px;">||<i>w</i>||</div>
+        </div>
     </span>
 </div>
 
@@ -343,9 +347,9 @@ b = bias term
 
 Convert to dual form 
 
-Find αᵢ values for each training point 
+Find <i>&alpha;<sub>i</sub></i> values for each training point 
 
-Support vectors are points where <i>&alpha;</i><sub>i</sub>.
+Support vectors are points where <i>&alpha;<sub>i</sub></i> > 0.
 
 **Step 7:**  For non-linear data, apply Kernel Trick: 
 
@@ -388,7 +392,13 @@ Maps data to higher dimension where linear separation is possible
 
 <div class="formula-block formula-block--left">
     <span class="formula-text">
-       Calculate: <i>f</i>(<i>x</i>) = &sum;<sub><i>i</i>=1</sub><sup><i>m</i></sup> <i>&alpha;</i><sub>i</sub><i>y</i><sub>i</sub><i>K</i>(<i>x</i><sub>i</sub>, <i>x</i>) + <i>b</i>
+       Calculate: <i>f</i>(<i>x</i>) = 
+        <div style="display: inline-block; vertical-align: middle; text-align: center; line-height: 1.1; margin: 0 5px;">
+            <div style="font-size: 0.75em;"><i>m</i></div>
+            <div style="font-size: 1.7em; margin: 3px 0;">&sum;</div>
+            <div style="font-size: 0.75em;"><i>i</i>=1</div>
+        </div>
+        <i>&alpha;<sub>i</sub></i> <i>y<sub>i</sub></i> <i>K</i>(<i>x<sub>i</sub></i>, <i>x</i>) + <i>b</i>
     </span>
 </div>
 
